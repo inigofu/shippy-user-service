@@ -274,7 +274,7 @@ type Role struct {
 	Id     string  `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	Name   string  `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
 	Users  []*User `protobuf:"bytes,3,rep,name=users" json:"users,omitempty"`
-	Menues []*Menu `protobuf:"bytes,4,rep,name=menues" json:"menues,omitempty"`
+	Menues []*Menu `protobuf:"bytes,4,rep,name=menues" json:"menues,omitempty" gorm:"many2many:role_menus;association_foreignkey:idAccount;foreignkey:idPerson"`
 }
 
 func (m *Role) Reset()                    { *m = Role{} }
