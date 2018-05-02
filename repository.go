@@ -10,6 +10,12 @@ type Repository interface {
 	Get(id string) (*pb.User, error)
 	Create(user *pb.User) error
 	GetByEmail(email string) (*pb.User, error)
+	GetAllRoles() ([]*pb.Role, error)
+	GetRole(id string) (*pb.Role, error)
+	CreateRole(role *pb.Role) error
+	GetAllMenues() ([]*pb.Menu, error)
+	GetMenu(id string) (*pb.Menu, error)
+	CreateMenu(menu *pb.Menu) error
 }
 
 type UserRepository struct {
@@ -44,6 +50,51 @@ func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
 
 func (repo *UserRepository) Create(user *pb.User) error {
 	if err := repo.db.Create(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (repo *UserRepository) GetAllRoles() ([]*pb.Role, error) {
+	var roles []*pb.Role
+	if err := repo.db.Find(&roles).Error; err != nil {
+		return nil, err
+	}
+	return roles, nil
+}
+
+func (repo *UserRepository) GetRole(id string) (*pb.Role, error) {
+	var role *pb.Role
+	role.Id = id
+	if err := repo.db.First(&role).Error; err != nil {
+		return nil, err
+	}
+	return role, nil
+}
+func (repo *UserRepository) CreateRole(role *pb.Role) error {
+	if err := repo.db.Create(role).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) GetAllMenues() ([]*pb.Menu, error) {
+	var menues []*pb.Menu
+	if err := repo.db.Find(&menues).Error; err != nil {
+		return nil, err
+	}
+	return menues, nil
+}
+
+func (repo *UserRepository) GetMenu(id string) (*pb.Menu, error) {
+	var menu *pb.Menu
+	menu.Id = id
+	if err := repo.db.First(&menu).Error; err != nil {
+		return nil, err
+	}
+	return menu, nil
+}
+func (repo *UserRepository) CreateMenu(menu *pb.Menu) error {
+	if err := repo.db.Create(menu).Error; err != nil {
 		return err
 	}
 	return nil

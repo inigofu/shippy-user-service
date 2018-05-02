@@ -17,7 +17,7 @@ type service struct {
 	tokenService Authable
 }
 
-func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error {
+func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 	user, err := srv.repo.Get(req.Id)
 	if err != nil {
 		return err
@@ -26,7 +26,7 @@ func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.Response) err
 	return nil
 }
 
-func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.Response) error {
+func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
 	users, err := srv.repo.GetAll()
 	if err != nil {
 		return err
@@ -57,7 +57,7 @@ func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.Token) error
 	return nil
 }
 
-func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.Response) error {
+func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 
 	log.Println("Creating user: ", req)
 
@@ -103,5 +103,38 @@ func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.To
 
 	res.Valid = true
 
+	return nil
+}
+func (srv *service) CreateRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
+	log.Println("Creating role: ", req)
+
+	if err := srv.repo.CreateRole(req); err != nil {
+		return errors.New(fmt.Sprintf("error creating role: %v", err))
+	}
+
+	res.Role = req
+	return nil
+}
+func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
+	return nil
+}
+func (srv *service) GetAllRoles(ctx context.Context, req *pb.Request, res *pb.ResponseRole) error {
+	return nil
+}
+
+func (srv *service) CreateMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
+	log.Println("Creating menu: ", req)
+
+	if err := srv.repo.CreateMenu(req); err != nil {
+		return errors.New(fmt.Sprintf("error creating menu: %v", err))
+	}
+
+	res.Menu = req
+	return nil
+}
+func (srv *service) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
+	return nil
+}
+func (srv *service) GetAllMenues(ctx context.Context, req *pb.Request, res *pb.ResponseMenu) error {
 	return nil
 }

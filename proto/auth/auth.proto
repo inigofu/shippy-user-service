@@ -3,11 +3,17 @@ syntax = "proto3";
 package auth;
 
 service Auth {
-    rpc Create(User) returns (Response) {}
-    rpc Get(User) returns (Response) {}
-    rpc GetAll(Request) returns (Response) {}
+    rpc Create(User) returns (ResponseUser) {}
+    rpc Get(User) returns (ResponseUser) {}
+    rpc GetAll(Request) returns (ResponseUser) {}
     rpc Auth(User) returns (Token) {}
     rpc ValidateToken(Token) returns (Token) {}
+    rpc CreateRole(Role) returns (ResponseRole) {}
+    rpc GetRole(Role) returns (ResponseRole) {}
+    rpc GetAllRoles(Request) returns (ResponseRole) {}
+    rpc CreateMenu(Menu) returns (ResponseMenu) {}
+    rpc GetMenu(Menu) returns (ResponseMenu) {}
+    rpc GetAllMenues(Request) returns (ResponseMenu) {}
 }
 
 message User {
@@ -17,17 +23,27 @@ message User {
     string email = 4;
     string password = 5;
     string token = 6;
+    repeated Role roles=7;
 }
 
 message Request {}
 
-message Response {
+message ResponseUser {
     User user = 1;
     repeated User users = 2;
     repeated Error errors = 3;
     Token token = 4;
 }
-
+message ResponseRole {
+    Role role = 1;
+    repeated Role roles = 2;
+    repeated Error errors = 3;
+}
+message ResponseMenu {
+    Menu menu = 1;
+    repeated Menu menues = 2;
+    repeated Error errors = 3;
+}
 message Token {
     string token = 1;
     bool valid = 2;
@@ -37,4 +53,35 @@ message Token {
 message Error {
     int32 code = 1;
     string description = 2;
+}
+message Role {
+    string id = 1;
+    string name = 2;
+    repeated User users=3;
+    repeated Menu menues=4;
+}
+message Menu {
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    Badge badge = 4;
+    Wrapper wrapper =5;
+    bool title = 6;
+    repeated Menu children = 7;
+    string icon = 8;
+    repeated Role roles =9;
+
+}
+message Badge {
+    string id = 1;
+    string variant = 2;
+    string text = 3;
+}
+message Wrapper {
+    string id = 1;
+    string element = 2;
+    Atributes atributes = 3;
+}
+message Atributes {
+
 }
