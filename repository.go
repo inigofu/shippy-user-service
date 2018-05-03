@@ -72,7 +72,7 @@ func (repo *UserRepository) GetRole(id string) (*pb.Role, error) {
 	return role, nil
 }
 func (repo *UserRepository) CreateRole(role *pb.Role) error {
-	if err := repo.db.Create(role).Error; err != nil {
+	if err := repo.db.Create(&role).Error; err != nil {
 		return err
 	}
 	return nil
