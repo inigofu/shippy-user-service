@@ -39,13 +39,14 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type User struct {
-	Id       string  `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	Name     string  `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
-	Company  string  `protobuf:"bytes,3,opt,name=company" json:"company,omitempty"`
-	Email    string  `protobuf:"bytes,4,opt,name=email" json:"email,omitempty"`
-	Password string  `protobuf:"bytes,5,opt,name=password" json:"password,omitempty"`
-	Token    string  `protobuf:"bytes,6,opt,name=token" json:"token,omitempty"`
-	Roles    []*Role `protobuf:"bytes,7,rep,name=roles" json:"roles,omitempty"`
+	Id       string `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	Name     string `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Company  string `protobuf:"bytes,3,opt,name=company" json:"company,omitempty"`
+	Email    string `protobuf:"bytes,4,opt,name=email" json:"email,omitempty"`
+	Password string `protobuf:"bytes,5,opt,name=password" json:"password,omitempty"`
+	Token    string `protobuf:"bytes,6,opt,name=token" json:"token,omitempty"`
+	// @inject_tag: gorm:"many2many:user_roles;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:role_id;jointable_foreignkey:user_id;"
+	Roles []*Role `protobuf:"bytes,7,rep,name=roles" json:"roles,omitempty" gorm:"many2many:user_roles;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:role_id;jointable_foreignkey:user_id;"`
 }
 
 func (m *User) Reset()                    { *m = User{} }
@@ -311,16 +312,19 @@ func (m *Role) GetMenues() []*Menu {
 	return nil
 }
 
+// @inject_field: WrapperID string
+// @inject_field: BadgeID string
 type Menu struct {
-	Id       string   `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	Name     string   `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
-	Url      string   `protobuf:"bytes,3,opt,name=url" json:"url,omitempty"`
-	Badge    *Badge   `protobuf:"bytes,4,opt,name=badge" json:"badge,omitempty"`
-	Wrapper  *Wrapper `protobuf:"bytes,5,opt,name=wrapper" json:"wrapper,omitempty"`
-	Title    bool     `protobuf:"varint,6,opt,name=title" json:"title,omitempty"`
-	Children []*Menu  `protobuf:"bytes,7,rep,name=children" json:"children,omitempty"`
-	Icon     string   `protobuf:"bytes,8,opt,name=icon" json:"icon,omitempty"`
-	Roles    []*Role  `protobuf:"bytes,9,rep,name=roles" json:"roles,omitempty"`
+	Id      string   `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	Name    string   `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Url     string   `protobuf:"bytes,3,opt,name=url" json:"url,omitempty"`
+	Badge   *Badge   `protobuf:"bytes,4,opt,name=badge" json:"badge,omitempty"`
+	Wrapper *Wrapper `protobuf:"bytes,5,opt,name=wrapper" json:"wrapper,omitempty"`
+	Title   bool     `protobuf:"varint,6,opt,name=title" json:"title,omitempty"`
+	// @inject_tag: gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:parent_id;jointable_foreignkey:children_id;"
+	Children []*Menu `protobuf:"bytes,7,rep,name=children" json:"children,omitempty" gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:parent_id;jointable_foreignkey:children_id;"`
+	Icon     string  `protobuf:"bytes,8,opt,name=icon" json:"icon,omitempty"`
+	Roles    []*Role `protobuf:"bytes,9,rep,name=roles" json:"roles,omitempty"`
 }
 
 func (m *Menu) Reset()                    { *m = Menu{} }
@@ -423,6 +427,7 @@ func (m *Badge) GetText() string {
 	return ""
 }
 
+// @inject_field: AtributesID string
 type Wrapper struct {
 	Id        string     `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	Element   string     `protobuf:"bytes,2,opt,name=element" json:"element,omitempty"`
@@ -455,6 +460,7 @@ func (m *Wrapper) GetAtributes() *Atributes {
 	return nil
 }
 
+// @inject_field: gorm.Model
 type Atributes struct {
 }
 
