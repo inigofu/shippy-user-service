@@ -102,16 +102,21 @@ func (repo *UserRepository) CreateMenu(menu *pb.Menu) error {
 }
 
 func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
-	var user *pb.User
-	var roles []*pb.Role
+	user := &pb.User{}
+	//var roles []*pb.Role
 	var menues []*pb.Menu
-	if err := repo.db.Where("email = ?", email).Preload("Roles").
+	var rolmenues []*pb.Menu
+
+	if err := repo.db.Preload("Roles.Menues").Where("email = ?", email).
 		First(&user).Error; err != nil {
 		return nil, err
 	}
-	roles = user.Roles
-	println(roles)
-	if err := repo.db.Find(&menues).Error; err != nil {
+
+	for _, role := range user.Roles {
+		rolmenues = append(rolmenues, role.Menues...)
+	}
+
+	if err := repo.db.Preload("Children").Find(&menues).Error; err != nil {
 		return nil, err
 	}
 	return menues, nil
