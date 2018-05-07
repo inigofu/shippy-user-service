@@ -23,6 +23,7 @@ message User {
     string email = 4;
     string password = 5;
     string token = 6;
+    // @inject_tag: gorm:"many2many:user_roles;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:role_id;jointable_foreignkey:user_id;"
     repeated Role roles=7;
 }
 
@@ -58,8 +59,11 @@ message Role {
     string id = 1;
     string name = 2;
     repeated User users=3;
+    // @inject_tag: gorm:"many2many:role_menus;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:menu_id;jointable_foreignkey:role_id;"
     repeated Menu menues=4;
 }
+// @inject_field: WrapperID string
+// @inject_field: BadgeID string
 message Menu {
     string id = 1;
     string name = 2;
@@ -67,6 +71,7 @@ message Menu {
     Badge badge = 4;
     Wrapper wrapper =5;
     bool title = 6;
+    // @inject_tag: gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:parent_id;jointable_foreignkey:children_id;"
     repeated Menu children = 7;
     string icon = 8;
     repeated Role roles =9;
@@ -77,11 +82,13 @@ message Badge {
     string variant = 2;
     string text = 3;
 }
+// @inject_field: AtributesID string
 message Wrapper {
     string id = 1;
     string element = 2;
     Atributes atributes = 3;
 }
+// @inject_field: gorm.Model
 message Atributes {
 
 }
