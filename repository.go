@@ -106,7 +106,7 @@ func (repo *UserRepository) GetUserMenus(userid string) ([]*pb.Menu, error) {
 	var roles []*pb.Role
 	var menues []*pb.Menu
 	user.Id = userid
-	if err := repo.db.Model(&user).Related(&roles, "Roles"); err != nil {
+	if err := repo.db.Model(&user).Related(&roles, "Roles").Error; err != nil {
 		return nil, err
 	}
 	if err := repo.db.Find(&menues).Error; err != nil {
