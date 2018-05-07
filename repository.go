@@ -101,13 +101,12 @@ func (repo *UserRepository) CreateMenu(menu *pb.Menu) error {
 	return nil
 }
 
-func (repo *UserRepository) GetUserMenus(userid string) ([]*pb.Menu, error) {
+func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
 	var user *pb.User
 	var roles []*pb.Role
 	var menues []*pb.Menu
-	user.Id = userid
-	repo.db.Preload("Roles").First(&user)
-	if err := repo.db.First(&user).Error; err != nil {
+	if err := repo.db.Where("email = ?", email).Preload("Roles").
+		First(&user).Error; err != nil {
 		return nil, err
 	}
 	roles = user.Roles

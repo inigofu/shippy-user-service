@@ -27,7 +27,7 @@ func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser)
 }
 
 func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
-	menues, err := srv.repo.GetUserMenus(req.Id)
+	menues, err := srv.repo.GetUserMenus(req.Email)
 	if err != nil {
 		return err
 	}
