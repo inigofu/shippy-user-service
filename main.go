@@ -28,6 +28,7 @@ func main() {
 	db.AutoMigrate(&pb.Menu{})
 	db.AutoMigrate(&pb.Badge{})
 	db.AutoMigrate(&pb.Wrapper{})
+	db.AutoMigrate(&pb.Atributes{})
 
 	repo := &UserRepository{db}
 
