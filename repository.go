@@ -16,6 +16,7 @@ type Repository interface {
 	GetAllMenues() ([]*pb.Menu, error)
 	GetMenu(id string) (*pb.Menu, error)
 	CreateMenu(menu *pb.Menu) error
+	GetUserMenus(userid string) ([]*pb.Menu, error)
 }
 
 type UserRepository struct {
@@ -98,4 +99,18 @@ func (repo *UserRepository) CreateMenu(menu *pb.Menu) error {
 		return err
 	}
 	return nil
+}
+
+func (repo *UserRepository) GetUserMenus(userid string) ([]*pb.Menu, error) {
+	var user *pb.User
+	var roles []*pb.Role
+	var menues []*pb.Menu
+	user.Id = userid
+	if err := repo.db.Model(&user).Related(&roles, "Roles"); err != nil {
+		return nil, err
+	}
+	if err := repo.db.Find(&menues).Error; err != nil {
+		return nil, err
+	}
+	return menues, nil
 }

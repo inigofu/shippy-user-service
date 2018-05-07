@@ -319,8 +319,8 @@ type Menu struct {
 	Badge   *Badge   `protobuf:"bytes,4,opt,name=badge" json:"badge,omitempty"`
 	Wrapper *Wrapper `protobuf:"bytes,5,opt,name=wrapper" json:"wrapper,omitempty"`
 	Title   bool     `protobuf:"varint,6,opt,name=title" json:"title,omitempty"`
-	// @inject_tag: gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:parent_id;jointable_foreignkey:children_id;"
-	Children  []*Menu `protobuf:"bytes,7,rep,name=children" json:"children,omitempty" gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:parent_id;jointable_foreignkey:children_id;"`
+	// @inject_tag: gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:children_id;jointable_foreignkey:parent_id;"
+	Children  []*Menu `protobuf:"bytes,7,rep,name=children" json:"children,omitempty" gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:children_id;jointable_foreignkey:parent_id;"`
 	Icon      string  `protobuf:"bytes,8,opt,name=icon" json:"icon,omitempty"`
 	Roles     []*Role `protobuf:"bytes,9,rep,name=roles" json:"roles,omitempty"`
 	BadgeID   string  `protobuf:"bytes,10,opt,name=badgeID" json:"badgeID,omitempty"`

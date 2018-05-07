@@ -26,6 +26,15 @@ func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser)
 	return nil
 }
 
+func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
+	menues, err := srv.repo.GetUserMenus(req.Id)
+	if err != nil {
+		return err
+	}
+	res.Menues = menues
+	return nil
+}
+
 func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
 	users, err := srv.repo.GetAll()
 	if err != nil {

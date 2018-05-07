@@ -7,6 +7,7 @@ service Auth {
     rpc Get(User) returns (ResponseUser) {}
     rpc GetAll(Request) returns (ResponseUser) {}
     rpc Auth(User) returns (Token) {}
+    rpc GetUserMenus(User) returns (ResponseMenu) {}
     rpc ValidateToken(Token) returns (Token) {}
     rpc CreateRole(Role) returns (ResponseRole) {}
     rpc GetRole(Role) returns (ResponseRole) {}
@@ -70,7 +71,7 @@ message Menu {
     Badge badge = 4;
     Wrapper wrapper =5;
     bool title = 6;
-    // @inject_tag: gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:parent_id;jointable_foreignkey:children_id;"
+    // @inject_tag: gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:children_id;jointable_foreignkey:parent_id;"
     repeated Menu children = 7;
     string icon = 8;
     repeated Role roles =9;
