@@ -312,8 +312,8 @@ func (m *Role) GetMenues() []*Menu {
 	return nil
 }
 
-// @inject_field: WrapperID string
-// @inject_field: BadgeID string
+// @inject_field: badgeID string
+// @inject_field: wrapperID string
 type Menu struct {
 	Id      string   `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	Name    string   `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
@@ -325,6 +325,24 @@ type Menu struct {
 	Children []*Menu `protobuf:"bytes,7,rep,name=children" json:"children,omitempty" gorm:"many2many:menu_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:parent_id;jointable_foreignkey:children_id;"`
 	Icon     string  `protobuf:"bytes,8,opt,name=icon" json:"icon,omitempty"`
 	Roles    []*Role `protobuf:"bytes,9,rep,name=roles" json:"roles,omitempty"`
+
+	// custom fields
+	badgeID string
+	wrapperID string
+}
+
+// custom fields getter/setter
+func (m *Menu) BadgeID() string {
+	return m.badgeID
+}
+func (m *Menu) SetBadgeID(in string){
+	m.badgeID = in
+}
+func (m *Menu) WrapperID() string {
+	return m.wrapperID
+}
+func (m *Menu) SetWrapperID(in string){
+	m.wrapperID = in
 }
 
 func (m *Menu) Reset()                    { *m = Menu{} }
@@ -427,11 +445,22 @@ func (m *Badge) GetText() string {
 	return ""
 }
 
-// @inject_field: AtributesID string
+// @inject_field: atributesID string
 type Wrapper struct {
 	Id        string     `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	Element   string     `protobuf:"bytes,2,opt,name=element" json:"element,omitempty"`
 	Atributes *Atributes `protobuf:"bytes,3,opt,name=atributes" json:"atributes,omitempty"`
+
+	// custom fields
+	atributesID string
+}
+
+// custom fields getter/setter
+func (m *Wrapper) AtributesID() string {
+	return m.atributesID
+}
+func (m *Wrapper) SetAtributesID(in string){
+	m.atributesID = in
 }
 
 func (m *Wrapper) Reset()                    { *m = Wrapper{} }
@@ -460,8 +489,19 @@ func (m *Wrapper) GetAtributes() *Atributes {
 	return nil
 }
 
-// @inject_field: gorm.Model
+// @inject_field: id uint
 type Atributes struct {
+
+	// custom fields
+	id uint
+}
+
+// custom fields getter/setter
+func (m *Atributes) Id() uint {
+	return m.id
+}
+func (m *Atributes) SetId(in uint){
+	m.id = in
 }
 
 func (m *Atributes) Reset()                    { *m = Atributes{} }

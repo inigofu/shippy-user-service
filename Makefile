@@ -7,8 +7,8 @@ build:
 buildproto:
 	protoc 	--micro_out=. --go_out=. \
 		proto/auth/auth.proto
-		protoc-go-inject-tag -input=./proto/auth/auth.pb.go
-		protoc-go-inject-field -input=./proto/auth/auth.pb.go
+	protoc-go-inject-tag -input=./proto/auth/auth.pb.go
+	protoc-go-inject-field -input=./proto/auth/auth.pb.go
 	
 run:
 	docker run --net="host" \

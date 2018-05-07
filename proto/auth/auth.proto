@@ -62,8 +62,9 @@ message Role {
     // @inject_tag: gorm:"many2many:role_menus;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:menu_id;jointable_foreignkey:role_id;"
     repeated Menu menues=4;
 }
-// @inject_field: WrapperID string
-// @inject_field: BadgeID string
+
+// @inject_field: badgeID string
+// @inject_field: wrapperID string
 message Menu {
     string id = 1;
     string name = 2;
@@ -82,13 +83,13 @@ message Badge {
     string variant = 2;
     string text = 3;
 }
-// @inject_field: AtributesID string
+// @inject_field: atributesID string
 message Wrapper {
     string id = 1;
     string element = 2;
     Atributes atributes = 3;
 }
-// @inject_field: gorm.Model
+// @inject_field: id uint
 message Atributes {
 
 }
