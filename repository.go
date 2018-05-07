@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	pb "github.com/inigofu/shippy-user-service/proto/auth"
 	"github.com/jinzhu/gorm"
 )
@@ -105,19 +107,37 @@ func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
 	user := &pb.User{}
 	//var roles []*pb.Role
 	var menues []*pb.Menu
-	var rolmenues []*pb.Menu
+	var rolmenuesall []*pb.Menu
 
-	if err := repo.db.Preload("Roles.Menues").Where("email = ?", email).
+	if err := repo.db.Preload("Roles.Menues").Select("id").Where("email = ?", email).
 		First(&user).Error; err != nil {
 		return nil, err
 	}
 
 	for _, role := range user.Roles {
-		rolmenues = append(rolmenues, role.Menues...)
+		rolmenuesall = append(rolmenuesall, role.Menues...)
 	}
-
-	if err := repo.db.Preload("Children").Find(&menues).Error; err != nil {
+	var rolmenues []string
+	for _, role := range rolmenuesall {
+		rolmenues = append(rolmenues, role.Id)
+	}
+	type Result struct {
+		Children_id string
+	}
+	fmt.Println(rolmenues)
+	var results []Result
+	var childrenid []string
+	if err := repo.db.Raw("SELECT children_id FROM menu_childrens").Scan(&results).Error; err != nil {
 		return nil, err
 	}
+	for _, result := range results {
+		childrenid = append(childrenid, result.Children_id)
+	}
+	// (*sql.Row)
+	fmt.Println(childrenid)
+	if err := repo.db.Not(childrenid).Where(rolmenues).Preload("Children", "id in (?)", rolmenues).Find(&menues).Error; err != nil {
+		return nil, err
+	}
+
 	return menues, nil
 }
