@@ -57,14 +57,6 @@ type AuthClient interface {
 	Get(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	GetAll(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseUser, error)
 	Auth(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseToken, error)
-	GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error)
-	ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*Token, error)
-	CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
-	GetRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
-	GetAllRoles(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseRole, error)
-	CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
-	GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
-	GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error)
 }
 
 type authClient struct {
@@ -125,86 +117,6 @@ func (c *authClient) Auth(ctx context.Context, in *User, opts ...client.CallOpti
 	return out, nil
 }
 
-func (c *authClient) GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.GetUserMenus", in)
-	out := new(ResponseMenu)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*Token, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.ValidateToken", in)
-	out := new(Token)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.CreateRole", in)
-	out := new(ResponseRole)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) GetRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.GetRole", in)
-	out := new(ResponseRole)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) GetAllRoles(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseRole, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.GetAllRoles", in)
-	out := new(ResponseRole)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.CreateMenu", in)
-	out := new(ResponseMenu)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.GetMenu", in)
-	out := new(ResponseMenu)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.GetAllMenues", in)
-	out := new(ResponseMenu)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // Server API for Auth service
 
 type AuthHandler interface {
@@ -212,14 +124,6 @@ type AuthHandler interface {
 	Get(context.Context, *User, *ResponseUser) error
 	GetAll(context.Context, *Request, *ResponseUser) error
 	Auth(context.Context, *User, *ResponseToken) error
-	GetUserMenus(context.Context, *User, *ResponseMenu) error
-	ValidateToken(context.Context, *Token, *Token) error
-	CreateRole(context.Context, *Role, *ResponseRole) error
-	GetRole(context.Context, *Role, *ResponseRole) error
-	GetAllRoles(context.Context, *Request, *ResponseRole) error
-	CreateMenu(context.Context, *Menu, *ResponseMenu) error
-	GetMenu(context.Context, *Menu, *ResponseMenu) error
-	GetAllMenues(context.Context, *Request, *ResponseMenu) error
 }
 
 func RegisterAuthHandler(s server.Server, hdlr AuthHandler, opts ...server.HandlerOption) {
@@ -246,34 +150,166 @@ func (h *Auth) Auth(ctx context.Context, in *User, out *ResponseToken) error {
 	return h.AuthHandler.Auth(ctx, in, out)
 }
 
-func (h *Auth) GetUserMenus(ctx context.Context, in *User, out *ResponseMenu) error {
-	return h.AuthHandler.GetUserMenus(ctx, in, out)
+// Client API for UserData service
+
+type UserDataClient interface {
+	GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error)
+	ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*Token, error)
+	CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
+	GetRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
+	GetAllRoles(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseRole, error)
+	CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
+	GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
+	GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error)
 }
 
-func (h *Auth) ValidateToken(ctx context.Context, in *Token, out *Token) error {
-	return h.AuthHandler.ValidateToken(ctx, in, out)
+type userDataClient struct {
+	c           client.Client
+	serviceName string
 }
 
-func (h *Auth) CreateRole(ctx context.Context, in *Role, out *ResponseRole) error {
-	return h.AuthHandler.CreateRole(ctx, in, out)
+func NewUserDataClient(serviceName string, c client.Client) UserDataClient {
+	if c == nil {
+		c = client.NewClient()
+	}
+	if len(serviceName) == 0 {
+		serviceName = "auth"
+	}
+	return &userDataClient{
+		c:           c,
+		serviceName: serviceName,
+	}
 }
 
-func (h *Auth) GetRole(ctx context.Context, in *Role, out *ResponseRole) error {
-	return h.AuthHandler.GetRole(ctx, in, out)
+func (c *userDataClient) GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error) {
+	req := c.c.NewRequest(c.serviceName, "UserData.GetUserMenus", in)
+	out := new(ResponseMenu)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-func (h *Auth) GetAllRoles(ctx context.Context, in *Request, out *ResponseRole) error {
-	return h.AuthHandler.GetAllRoles(ctx, in, out)
+func (c *userDataClient) ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*Token, error) {
+	req := c.c.NewRequest(c.serviceName, "UserData.ValidateToken", in)
+	out := new(Token)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-func (h *Auth) CreateMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
-	return h.AuthHandler.CreateMenu(ctx, in, out)
+func (c *userDataClient) CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error) {
+	req := c.c.NewRequest(c.serviceName, "UserData.CreateRole", in)
+	out := new(ResponseRole)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-func (h *Auth) GetMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
-	return h.AuthHandler.GetMenu(ctx, in, out)
+func (c *userDataClient) GetRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error) {
+	req := c.c.NewRequest(c.serviceName, "UserData.GetRole", in)
+	out := new(ResponseRole)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-func (h *Auth) GetAllMenues(ctx context.Context, in *Request, out *ResponseMenu) error {
-	return h.AuthHandler.GetAllMenues(ctx, in, out)
+func (c *userDataClient) GetAllRoles(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseRole, error) {
+	req := c.c.NewRequest(c.serviceName, "UserData.GetAllRoles", in)
+	out := new(ResponseRole)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userDataClient) CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error) {
+	req := c.c.NewRequest(c.serviceName, "UserData.CreateMenu", in)
+	out := new(ResponseMenu)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userDataClient) GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error) {
+	req := c.c.NewRequest(c.serviceName, "UserData.GetMenu", in)
+	out := new(ResponseMenu)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userDataClient) GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error) {
+	req := c.c.NewRequest(c.serviceName, "UserData.GetAllMenues", in)
+	out := new(ResponseMenu)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Server API for UserData service
+
+type UserDataHandler interface {
+	GetUserMenus(context.Context, *User, *ResponseMenu) error
+	ValidateToken(context.Context, *Token, *Token) error
+	CreateRole(context.Context, *Role, *ResponseRole) error
+	GetRole(context.Context, *Role, *ResponseRole) error
+	GetAllRoles(context.Context, *Request, *ResponseRole) error
+	CreateMenu(context.Context, *Menu, *ResponseMenu) error
+	GetMenu(context.Context, *Menu, *ResponseMenu) error
+	GetAllMenues(context.Context, *Request, *ResponseMenu) error
+}
+
+func RegisterUserDataHandler(s server.Server, hdlr UserDataHandler, opts ...server.HandlerOption) {
+	s.Handle(s.NewHandler(&UserData{hdlr}, opts...))
+}
+
+type UserData struct {
+	UserDataHandler
+}
+
+func (h *UserData) GetUserMenus(ctx context.Context, in *User, out *ResponseMenu) error {
+	return h.UserDataHandler.GetUserMenus(ctx, in, out)
+}
+
+func (h *UserData) ValidateToken(ctx context.Context, in *Token, out *Token) error {
+	return h.UserDataHandler.ValidateToken(ctx, in, out)
+}
+
+func (h *UserData) CreateRole(ctx context.Context, in *Role, out *ResponseRole) error {
+	return h.UserDataHandler.CreateRole(ctx, in, out)
+}
+
+func (h *UserData) GetRole(ctx context.Context, in *Role, out *ResponseRole) error {
+	return h.UserDataHandler.GetRole(ctx, in, out)
+}
+
+func (h *UserData) GetAllRoles(ctx context.Context, in *Request, out *ResponseRole) error {
+	return h.UserDataHandler.GetAllRoles(ctx, in, out)
+}
+
+func (h *UserData) CreateMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
+	return h.UserDataHandler.CreateMenu(ctx, in, out)
+}
+
+func (h *UserData) GetMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
+	return h.UserDataHandler.GetMenu(ctx, in, out)
+}
+
+func (h *UserData) GetAllMenues(ctx context.Context, in *Request, out *ResponseMenu) error {
+	return h.UserDataHandler.GetAllMenues(ctx, in, out)
 }
