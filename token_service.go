@@ -1,10 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
-	pb "github.com/inigofu/shippy-user-service/proto/auth"
 	"github.com/dgrijalva/jwt-go"
+	pb "github.com/inigofu/shippy-user-service/proto/auth"
 )
 
 var (
@@ -39,7 +40,7 @@ func (srv *TokenService) Decode(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return key, nil
 	})
-
+	fmt.Println(token)
 	// Validate the token and return the custom claims
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		return claims, nil
