@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -37,6 +38,8 @@ type TokenService struct {
 func (srv *TokenService) Decode(tokenString string) (*CustomClaims, error) {
 	fmt.Println(tokenString)
 	// Parse the token
+	splitToken := strings.Split(tokenString, "Bearer")
+	tokenString = splitToken[1]
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return key, nil
 	})
