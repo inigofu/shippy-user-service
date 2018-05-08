@@ -6,23 +6,19 @@ import (
 	"log"
 
 	pb "github.com/inigofu/shippy-user-service/proto/auth"
+	"github.com/micro/go-micro/metadata"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/net/context"
 )
 
 const topic = "user.created"
 
-type serviceAuth struct {
+type service struct {
 	repo         Repository
 	tokenService Authable
 }
 
-type serviceUser struct {
-	repo         Repository
-	tokenService Authable
-}
-
-func (srv *serviceAuth) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
+func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 	user, err := srv.repo.Get(req.Id)
 	if err != nil {
 		return err
@@ -31,8 +27,23 @@ func (srv *serviceAuth) Get(ctx context.Context, req *pb.User, res *pb.ResponseU
 	return nil
 }
 
-func (srv *serviceUser) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
-	log.Println("Getting menues from:", req.Email)
+func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
+	meta, ok := metadata.FromContext(ctx)
+	if !ok {
+		return errors.New("no auth meta-data found in request")
+	}
+
+	// Note this is now uppercase (not entirely sure why this is...)
+	token := meta["Token"]
+	log.Println("Authenticating with token: ", token)
+	tokin := &pb.Token{
+		Token: token,
+	}
+
+	err := srv.ValidateToken(ctx, tokin, tokin)
+	if err != nil {
+		return err
+	}
 	menues, err := srv.repo.GetUserMenus(req.Email)
 	if err != nil {
 		return err
@@ -41,7 +52,7 @@ func (srv *serviceUser) GetUserMenus(ctx context.Context, req *pb.User, res *pb.
 	return nil
 }
 
-func (srv *serviceAuth) GetAll(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
+func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
 	users, err := srv.repo.GetAll()
 	if err != nil {
 		return err
@@ -50,7 +61,7 @@ func (srv *serviceAuth) GetAll(ctx context.Context, req *pb.Request, res *pb.Res
 	return nil
 }
 
-func (srv *serviceAuth) Auth(ctx context.Context, req *pb.User, res *pb.ResponseToken) error {
+func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.ResponseToken) error {
 	log.Println("Logging in with:", req.Email, req.Password)
 	user, err := srv.repo.GetByEmail(req.Email)
 	log.Println(user, err)
@@ -73,7 +84,7 @@ func (srv *serviceAuth) Auth(ctx context.Context, req *pb.User, res *pb.Response
 	return nil
 }
 
-func (srv *serviceAuth) Create(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
+func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 
 	log.Println("Creating user: ", req)
 
@@ -104,7 +115,7 @@ func (srv *serviceAuth) Create(ctx context.Context, req *pb.User, res *pb.Respon
 	return nil
 }
 
-func (srv *serviceAuth) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Token) error {
+func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Token) error {
 
 	// Decode token
 	claims, err := srv.tokenService.Decode(req.Token)
@@ -121,7 +132,7 @@ func (srv *serviceAuth) ValidateToken(ctx context.Context, req *pb.Token, res *p
 
 	return nil
 }
-func (srv *serviceUser) CreateRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
+func (srv *service) CreateRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
 	log.Println("Creating role: ", req)
 
 	if err := srv.repo.CreateRole(req); err != nil {
@@ -131,14 +142,14 @@ func (srv *serviceUser) CreateRole(ctx context.Context, req *pb.Role, res *pb.Re
 	res.Role = req
 	return nil
 }
-func (srv *serviceUser) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
+func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
 	return nil
 }
-func (srv *serviceUser) GetAllRoles(ctx context.Context, req *pb.Request, res *pb.ResponseRole) error {
+func (srv *service) GetAllRoles(ctx context.Context, req *pb.Request, res *pb.ResponseRole) error {
 	return nil
 }
 
-func (srv *serviceUser) CreateMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
+func (srv *service) CreateMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
 	log.Println("Creating menu: ", req)
 
 	if err := srv.repo.CreateMenu(req); err != nil {
@@ -148,9 +159,9 @@ func (srv *serviceUser) CreateMenu(ctx context.Context, req *pb.Menu, res *pb.Re
 	res.Menu = req
 	return nil
 }
-func (srv *serviceUser) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
+func (srv *service) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
 	return nil
 }
-func (srv *serviceUser) GetAllMenues(ctx context.Context, req *pb.Request, res *pb.ResponseMenu) error {
+func (srv *service) GetAllMenues(ctx context.Context, req *pb.Request, res *pb.ResponseMenu) error {
 	return nil
 }
