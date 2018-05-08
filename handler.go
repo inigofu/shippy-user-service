@@ -35,6 +35,9 @@ func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.Resp
 
 	// Note this is now uppercase (not entirely sure why this is...)
 	token := meta["Token"]
+	if token == "" {
+		return errors.New("no auth meta-data found in request")
+	}
 	log.Println("Authenticating with token: ", token)
 	tokin := &pb.Token{
 		Token: token,
