@@ -119,7 +119,7 @@ func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.ResponseUs
 }
 
 func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Token) error {
-
+	log.Println("validating toke:", req.Token)
 	// Decode token
 	claims, err := srv.tokenService.Decode(req.Token)
 
