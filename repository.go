@@ -52,7 +52,7 @@ func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
 }
 
 func (repo *UserRepository) Create(user *pb.User) error {
-	if err := repo.db.Create(user).Error; err != nil {
+	if err := repo.db.Set("gorm:association_autoupdate", false).Create(user).Error; err != nil {
 		return err
 	}
 	return nil
@@ -75,7 +75,7 @@ func (repo *UserRepository) GetRole(id string) (*pb.Role, error) {
 	return role, nil
 }
 func (repo *UserRepository) CreateRole(role *pb.Role) error {
-	if err := repo.db.Create(&role).Error; err != nil {
+	if err := repo.db.Set("gorm:association_autoupdate", false).Create(&role).Error; err != nil {
 		return err
 	}
 	return nil
@@ -97,7 +97,7 @@ func (repo *UserRepository) GetMenu(id string) (*pb.Menu, error) {
 	return menu, nil
 }
 func (repo *UserRepository) CreateMenu(menu *pb.Menu) error {
-	if err := repo.db.Create(menu).Error; err != nil {
+	if err := repo.db.Set("gorm:association_autoupdate", false).Create(menu).Error; err != nil {
 		return err
 	}
 	return nil
