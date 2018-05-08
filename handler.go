@@ -32,6 +32,7 @@ func (srv *serviceAuth) Get(ctx context.Context, req *pb.User, res *pb.ResponseU
 }
 
 func (srv *serviceUser) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
+	log.Println("Getting menues from:", req.Email)
 	menues, err := srv.repo.GetUserMenus(req.Email)
 	if err != nil {
 		return err

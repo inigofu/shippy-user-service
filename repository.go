@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	pb "github.com/inigofu/shippy-user-service/proto/auth"
 	"github.com/jinzhu/gorm"
@@ -113,7 +114,7 @@ func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
 		First(&user).Error; err != nil {
 		return nil, err
 	}
-
+	log.Println("Getting menues from:", user)
 	for _, role := range user.Roles {
 		rolmenuesall = append(rolmenuesall, role.Menues...)
 	}
