@@ -62,7 +62,7 @@ func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.ResponseToke
 	if err != nil {
 		return err
 	}
-	res.Token.Token = token
+	res.Token = &pb.Token{Token: token}
 	res.User = user
 	return nil
 }
