@@ -13,6 +13,7 @@ It has these top-level messages:
 	ResponseUser
 	ResponseRole
 	ResponseMenu
+	ResponseToken
 	Token
 	Error
 	Role
@@ -55,7 +56,7 @@ type AuthClient interface {
 	Create(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	Get(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	GetAll(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseUser, error)
-	Auth(ctx context.Context, in *User, opts ...client.CallOption) (*Token, error)
+	Auth(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseToken, error)
 	GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error)
 	ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*Token, error)
 	CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
@@ -114,9 +115,9 @@ func (c *authClient) GetAll(ctx context.Context, in *Request, opts ...client.Cal
 	return out, nil
 }
 
-func (c *authClient) Auth(ctx context.Context, in *User, opts ...client.CallOption) (*Token, error) {
+func (c *authClient) Auth(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseToken, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.Auth", in)
-	out := new(Token)
+	out := new(ResponseToken)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -210,7 +211,7 @@ type AuthHandler interface {
 	Create(context.Context, *User, *ResponseUser) error
 	Get(context.Context, *User, *ResponseUser) error
 	GetAll(context.Context, *Request, *ResponseUser) error
-	Auth(context.Context, *User, *Token) error
+	Auth(context.Context, *User, *ResponseToken) error
 	GetUserMenus(context.Context, *User, *ResponseMenu) error
 	ValidateToken(context.Context, *Token, *Token) error
 	CreateRole(context.Context, *Role, *ResponseRole) error
@@ -241,7 +242,7 @@ func (h *Auth) GetAll(ctx context.Context, in *Request, out *ResponseUser) error
 	return h.AuthHandler.GetAll(ctx, in, out)
 }
 
-func (h *Auth) Auth(ctx context.Context, in *User, out *Token) error {
+func (h *Auth) Auth(ctx context.Context, in *User, out *ResponseToken) error {
 	return h.AuthHandler.Auth(ctx, in, out)
 }
 

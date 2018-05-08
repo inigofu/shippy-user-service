@@ -6,7 +6,7 @@ service Auth {
     rpc Create(User) returns (ResponseUser) {}
     rpc Get(User) returns (ResponseUser) {}
     rpc GetAll(Request) returns (ResponseUser) {}
-    rpc Auth(User) returns (Token) {}
+    rpc Auth(User) returns (ResponseToken) {}
     rpc GetUserMenus(User) returns (ResponseMenu) {}
     rpc ValidateToken(Token) returns (Token) {}
     rpc CreateRole(Role) returns (ResponseRole) {}
@@ -44,6 +44,11 @@ message ResponseRole {
 message ResponseMenu {
     Menu menu = 1;
     repeated Menu menues = 2;
+    repeated Error errors = 3;
+}
+message ResponseToken {
+    Token token = 1;
+    User user = 2;
     repeated Error errors = 3;
 }
 message Token {

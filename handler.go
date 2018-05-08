@@ -44,7 +44,7 @@ func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.Respons
 	return nil
 }
 
-func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.Token) error {
+func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.ResponseToken) error {
 	log.Println("Logging in with:", req.Email, req.Password)
 	user, err := srv.repo.GetByEmail(req.Email)
 	log.Println(user, err)
@@ -62,7 +62,8 @@ func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.Token) error
 	if err != nil {
 		return err
 	}
-	res.Token = token
+	res.Token.Token = token
+	res.User = user
 	return nil
 }
 
