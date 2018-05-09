@@ -42,8 +42,8 @@ func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.Resp
 	tokin := &pb.Token{
 		Token: token,
 	}
-
-	err := srv.ValidateToken(ctx, tokin, tokin)
+	tokout := &pb.ResponseToken{}
+	err := srv.ValidateToken(ctx, tokin, tokout)
 	if err != nil {
 		return err
 	}
@@ -132,7 +132,7 @@ func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Re
 		return errors.New("invalid user")
 	}
 
-	res.Valid = true
+	res.Token.Valid = true
 	res.User = claims.User
 
 	return nil
