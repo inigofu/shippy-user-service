@@ -132,8 +132,8 @@ func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Re
 		return errors.New("invalid user")
 	}
 
-	res.Token = &pb.Token{Valid: true} 
-	res.User = claims.User
+	res.Token = &pb.Token{Valid: true}
+	res.User = &pb.User{Email: claims.User.Email}
 
 	return nil
 }
