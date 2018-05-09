@@ -118,8 +118,9 @@ func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.ResponseUs
 	return nil
 }
 
-func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Token) error {
-	log.Println("validating toke:", req.Token)
+func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.ResponseToken) error {
+	log.Println("validating token:", req.Token)
+	log.Println("validating token complete:", req)
 	// Decode token
 	claims, err := srv.tokenService.Decode(req.Token)
 
@@ -132,6 +133,7 @@ func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.To
 	}
 
 	res.Valid = true
+	res.User = claims.User
 
 	return nil
 }

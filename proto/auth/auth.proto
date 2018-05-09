@@ -8,7 +8,7 @@ service Auth {
     rpc GetAll(Request) returns (ResponseUser) {}
     rpc Auth(User) returns (ResponseToken) {}
     rpc GetUserMenus(User) returns (ResponseMenu) {}
-    rpc ValidateToken(Token) returns (Token) {}
+    rpc ValidateToken(Token) returns (ResponseToken) {}
     rpc CreateRole(Role) returns (ResponseRole) {}
     rpc GetRole(Role) returns (ResponseRole) {}
     rpc GetAllRoles(Request) returns (ResponseRole) {}
