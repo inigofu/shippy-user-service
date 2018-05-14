@@ -20,6 +20,12 @@ type Repository interface {
 	GetMenu(id string) (*pb.Menu, error)
 	CreateMenu(menu *pb.Menu) error
 	GetUserMenus(userid string) ([]*pb.Menu, error)
+	GetForm(id string) (*pb.Form, error)
+	CreateForm(form *pb.Form) error
+	GetAllForms() ([]*pb.Form, error)
+	GetSchema(id string) (*pb.FormSchema, error)
+	CreateSchema(schema *pb.FormSchema) error
+	GetAllSchemas() ([]*pb.FormSchema, error)
 }
 
 type UserRepository struct {
@@ -141,4 +147,48 @@ func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
 	}
 
 	return menues, nil
+}
+func (repo *UserRepository) GetAllForms() ([]*pb.Form, error) {
+	var forms []*pb.Form
+	if err := repo.db.Find(&forms).Error; err != nil {
+		return nil, err
+	}
+	return forms, nil
+}
+
+func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
+	var form *pb.Form
+	form.Id = id
+	if err := repo.db.First(&form).Error; err != nil {
+		return nil, err
+	}
+	return form, nil
+}
+func (repo *UserRepository) CreateForm(form *pb.Form) error {
+	if err := repo.db.Create(&form).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) GetAllSchemas() ([]*pb.FormSchema, error) {
+	var formschemas []*pb.FormSchema
+	if err := repo.db.Find(&formschemas).Error; err != nil {
+		return nil, err
+	}
+	return formschemas, nil
+}
+
+func (repo *UserRepository) GetSchema(id string) (*pb.FormSchema, error) {
+	var formschema *pb.FormSchema
+	formschema.Id = id
+	if err := repo.db.First(&formschema).Error; err != nil {
+		return nil, err
+	}
+	return formschema, nil
+}
+func (repo *UserRepository) CreateSchema(formschema *pb.FormSchema) error {
+	if err := repo.db.Create(&formschema).Error; err != nil {
+		return err
+	}
+	return nil
 }

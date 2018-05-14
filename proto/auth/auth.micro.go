@@ -13,6 +13,8 @@ It has these top-level messages:
 	ResponseUser
 	ResponseRole
 	ResponseMenu
+	ResponseForm
+	ResponseFormSchema
 	ResponseToken
 	Token
 	Error
@@ -70,6 +72,12 @@ type AuthClient interface {
 	CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
 	GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
 	GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error)
+	CreateForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error)
+	GetForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error)
+	GetAllForms(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseForm, error)
+	CreateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
+	GetSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
+	GetAllSchemas(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseFormSchema, error)
 }
 
 type authClient struct {
@@ -210,6 +218,66 @@ func (c *authClient) GetAllMenues(ctx context.Context, in *Request, opts ...clie
 	return out, nil
 }
 
+func (c *authClient) CreateForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.CreateForm", in)
+	out := new(ResponseForm)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) GetForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.GetForm", in)
+	out := new(ResponseForm)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) GetAllForms(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseForm, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.GetAllForms", in)
+	out := new(ResponseForm)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) CreateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.CreateSchema", in)
+	out := new(ResponseFormSchema)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) GetSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.GetSchema", in)
+	out := new(ResponseFormSchema)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) GetAllSchemas(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseFormSchema, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.GetAllSchemas", in)
+	out := new(ResponseFormSchema)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Auth service
 
 type AuthHandler interface {
@@ -225,6 +293,12 @@ type AuthHandler interface {
 	CreateMenu(context.Context, *Menu, *ResponseMenu) error
 	GetMenu(context.Context, *Menu, *ResponseMenu) error
 	GetAllMenues(context.Context, *Request, *ResponseMenu) error
+	CreateForm(context.Context, *Form, *ResponseForm) error
+	GetForm(context.Context, *Form, *ResponseForm) error
+	GetAllForms(context.Context, *Request, *ResponseForm) error
+	CreateSchema(context.Context, *FormSchema, *ResponseFormSchema) error
+	GetSchema(context.Context, *FormSchema, *ResponseFormSchema) error
+	GetAllSchemas(context.Context, *Request, *ResponseFormSchema) error
 }
 
 func RegisterAuthHandler(s server.Server, hdlr AuthHandler, opts ...server.HandlerOption) {
@@ -281,4 +355,28 @@ func (h *Auth) GetMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
 
 func (h *Auth) GetAllMenues(ctx context.Context, in *Request, out *ResponseMenu) error {
 	return h.AuthHandler.GetAllMenues(ctx, in, out)
+}
+
+func (h *Auth) CreateForm(ctx context.Context, in *Form, out *ResponseForm) error {
+	return h.AuthHandler.CreateForm(ctx, in, out)
+}
+
+func (h *Auth) GetForm(ctx context.Context, in *Form, out *ResponseForm) error {
+	return h.AuthHandler.GetForm(ctx, in, out)
+}
+
+func (h *Auth) GetAllForms(ctx context.Context, in *Request, out *ResponseForm) error {
+	return h.AuthHandler.GetAllForms(ctx, in, out)
+}
+
+func (h *Auth) CreateSchema(ctx context.Context, in *FormSchema, out *ResponseFormSchema) error {
+	return h.AuthHandler.CreateSchema(ctx, in, out)
+}
+
+func (h *Auth) GetSchema(ctx context.Context, in *FormSchema, out *ResponseFormSchema) error {
+	return h.AuthHandler.GetSchema(ctx, in, out)
+}
+
+func (h *Auth) GetAllSchemas(ctx context.Context, in *Request, out *ResponseFormSchema) error {
+	return h.AuthHandler.GetAllSchemas(ctx, in, out)
 }

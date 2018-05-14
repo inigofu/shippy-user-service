@@ -15,6 +15,12 @@ service Auth {
     rpc CreateMenu(Menu) returns (ResponseMenu) {}
     rpc GetMenu(Menu) returns (ResponseMenu) {}
     rpc GetAllMenues(Request) returns (ResponseMenu) {}
+    rpc CreateForm(Form) returns (ResponseForm) {}
+    rpc GetForm(Form) returns (ResponseForm) {}
+    rpc GetAllForms(Request) returns (ResponseForm) {}
+    rpc CreateSchema(FormSchema) returns (ResponseFormSchema) {}
+    rpc GetSchema(FormSchema) returns (ResponseFormSchema) {}
+    rpc GetAllSchemas(Request) returns (ResponseFormSchema) {}
 }
 
 message User {
@@ -44,6 +50,16 @@ message ResponseRole {
 message ResponseMenu {
     Menu menu = 1;
     repeated Menu menues = 2;
+    repeated Error errors = 3;
+}
+message ResponseForm {
+    Form form = 1;
+    repeated Form forms = 2;
+    repeated Error errors = 3;
+}
+message ResponseFormSchema {
+    FormSchema formschema = 1;
+    repeated FormSchema formschemas = 2;
     repeated Error errors = 3;
 }
 message ResponseToken {

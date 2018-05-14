@@ -170,3 +170,42 @@ func (srv *service) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseM
 func (srv *service) GetAllMenues(ctx context.Context, req *pb.Request, res *pb.ResponseMenu) error {
 	return nil
 }
+
+func (srv *service) CreateForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
+	log.Println("Creating form: ", req)
+
+	if err := srv.repo.CreateForm(req); err != nil {
+		return errors.New(fmt.Sprintf("error creating form: %v", err))
+	}
+
+	res.Form = req
+	return nil
+}
+func (srv *service) GetForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
+	form, err := srv.repo.GetForm(req.Id)
+	if err != nil {
+		return err
+	}
+	res.Form = form
+	return nil
+}
+func (srv *service) GetAllForms(ctx context.Context, req *pb.Request, res *pb.ResponseForm) error {
+	return nil
+}
+
+func (srv *service) CreateSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
+	log.Println("Creating schema: ", req)
+
+	if err := srv.repo.CreateSchema(req); err != nil {
+		return errors.New(fmt.Sprintf("error creating schema: %v", err))
+	}
+
+	res.Formschema = req
+	return nil
+}
+func (srv *service) GetSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
+	return nil
+}
+func (srv *service) GetAllSchemas(ctx context.Context, req *pb.Request, res *pb.ResponseFormSchema) error {
+	return nil
+}
