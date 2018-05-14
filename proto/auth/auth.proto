@@ -135,7 +135,7 @@ string help = 13;
 // @inject_tag: `gorm:""default:'none'""`//Validator for value. It can be an array of functions too.
 repeated Validator validator = 14;
 // @inject_tag: `gorm:""default:'none'""`//custom css style classes. It will be appended to the .from-group
-repeated string styleClasses = 15;
+repeated Class styleClasses = 15;
 // @inject_tag: `gorm:""default:'none'""`//Array of button objects. This is useful if you need some helper function to fill the field. (E.g. generate password, get GPS location..etc)*
 repeated Buttons buttons = 16;
 
@@ -148,4 +148,7 @@ message Validator {
 message Buttons {
     string id =1;
     string text = 2;
+}
+message Class {
+    string class = 2;
 }

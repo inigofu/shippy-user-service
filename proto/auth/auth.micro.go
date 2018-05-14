@@ -25,6 +25,7 @@ It has these top-level messages:
 	FormSchema
 	Validator
 	Buttons
+	Class
 */
 package auth
 
