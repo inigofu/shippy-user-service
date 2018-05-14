@@ -21,6 +21,7 @@ It has these top-level messages:
 	Badge
 	Wrapper
 	Atributes
+	Form
 	FormSchema
 	Validator
 	Buttons

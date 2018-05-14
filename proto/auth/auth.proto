@@ -100,14 +100,18 @@ message Atributes {
     string id =1;
 }
 
-
+message Form {
+    string id=1;
+    string name=2;
+    repeated FormSchema fields=3;
+}
 message FormSchema {
-    // @inject_tag: `gorm:""default:'none'""`//Type of field
+// @inject_tag: `gorm:""default:'none'""`//Type of field
 string type = 1;
 // @inject_tag: `gorm:""default:'none'""`//Label of field
 string label = 2;
 // @inject_tag: `gorm:""default:'none'""`//Name of property in the model
-string model = 3;
+string model =3;
 // @inject_tag: `gorm:""default:'auto-generated'""`//id of the field. If not set, will be auto-generated from the slugified version of either: schema.inputName, schema.label or schema.model, in that order. If the fieldIdPrefix option is set, it's value will be prepended to both manual & auto-generated ids.
 string id = 4;
 // @inject_tag: `gorm:""default:'false'""`//is it a featured (bold) field? It can be a function too.
