@@ -103,6 +103,7 @@ message Atributes {
 message Form {
     string id=1;
     string name=2;
+    // @inject_tag: `gorm:"foreignkey:FormRefer"`
     repeated FormSchema fields=3;
 }
 message FormSchema {
@@ -132,12 +133,13 @@ string hint = 11;
 string inputName = 12;
 // @inject_tag: `gorm:""default:'none'""`//show this help if mouse hover the question icon before the caption of field. You can use HTML elements too.
 string help = 13;
-// @inject_tag: `gorm:""default:'none'""`//Validator for value. It can be an array of functions too.
+// @inject_tag: `gorm:"many2many:schema_validator;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:validator_id;jointable_foreignkey:schema_id;"default:'none'""`//Validator for value. It can be an array of functions too.
 repeated Validator validator = 14;
-// @inject_tag: `gorm:""default:'none'""`//custom css style classes. It will be appended to the .from-group
+// @inject_tag: `gorm:"many2many:schema_classes;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:class_id;jointable_foreignkey:schema_id;"default:'none'""`//custom css style classes. It will be appended to the .from-group
 repeated Class styleClasses = 15;
-// @inject_tag: `gorm:""default:'none'""`//Array of button objects. This is useful if you need some helper function to fill the field. (E.g. generate password, get GPS location..etc)*
+// @inject_tag: `gorm:"many2many:schema_buttons;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:button_id;jointable_foreignkey:schema_id;"default:'none'""`//Array of button objects. This is useful if you need some helper function to fill the field. (E.g. generate password, get GPS location..etc)*
 repeated Buttons buttons = 16;
+string FormRefer = 17;
 
 }
 
