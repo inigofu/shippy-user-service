@@ -33,6 +33,9 @@ func main() {
 	db.AutoMigrate(&pb.Badge{})
 	db.AutoMigrate(&pb.Wrapper{})
 	db.AutoMigrate(&pb.Atributes{})
+	db.AutoMigrate(&pb.FormSchema{})
+	db.AutoMigrate(&pb.Validator{})
+	db.AutoMigrate(&pb.Buttons{})
 
 	repo := &UserRepository{db}
 

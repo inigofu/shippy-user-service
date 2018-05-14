@@ -99,3 +99,49 @@ message Wrapper {
 message Atributes {
     string id =1;
 }
+
+
+message FormSchema {
+    // @inject_tag: `gorm:""default:'none'""`//Type of field
+string type = 1;
+// @inject_tag: `gorm:""default:'none'""`//Label of field
+string label = 2;
+// @inject_tag: `gorm:""default:'none'""`//Name of property in the model
+string model = 3;
+// @inject_tag: `gorm:""default:'auto-generated'""`//id of the field. If not set, will be auto-generated from the slugified version of either: schema.inputName, schema.label or schema.model, in that order. If the fieldIdPrefix option is set, it's value will be prepended to both manual & auto-generated ids.
+string id = 4;
+// @inject_tag: `gorm:""default:'false'""`//is it a featured (bold) field? It can be a function too.
+bool featured = 5;
+// @inject_tag: `gorm:""default:'true'""`//if false, field will be hidden. It can be a function too.
+bool visible = 6;
+// @inject_tag: `gorm:""default:'false'""`//if true, field will be disabled. It can be a function too.
+bool disabled = 7;
+// @inject_tag: `gorm:""default:'false'""`//if true, must be fill this field (need to use validator).
+bool required = 8;
+// @inject_tag: `gorm:""default:'false'""`//if true, it will visible only if multiple is true in component attributes
+bool multi = 9;
+// @inject_tag: `gorm:""default:'none'""`//Default value of the field (use when create a new model)
+string default = 10;
+// @inject_tag: `gorm:""default:'none'""`//show this hint below the field
+string hint = 11;
+// @inject_tag: `gorm:""default:'none'""`//set name attribute to input field. You can use it to generate normal HTML Forms and submit the field values to server-side. Example
+string inputName = 12;
+// @inject_tag: `gorm:""default:'none'""`//show this help if mouse hover the question icon before the caption of field. You can use HTML elements too.
+string help = 13;
+// @inject_tag: `gorm:""default:'none'""`//Validator for value. It can be an array of functions too.
+repeated Validator validator = 14;
+// @inject_tag: `gorm:""default:'none'""`//custom css style classes. It will be appended to the .from-group
+repeated string styleClasses = 15;
+// @inject_tag: `gorm:""default:'none'""`//Array of button objects. This is useful if you need some helper function to fill the field. (E.g. generate password, get GPS location..etc)*
+repeated Buttons buttons = 16;
+
+}
+
+message Validator {
+    string id =1;
+    string validator = 2;
+}
+message Buttons {
+    string id =1;
+    string text = 2;
+}
