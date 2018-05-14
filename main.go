@@ -37,6 +37,7 @@ func main() {
 	db.AutoMigrate(&pb.FormSchema{})
 	db.AutoMigrate(&pb.Validator{})
 	db.AutoMigrate(&pb.Buttons{})
+	db.AutoMigrate(&pb.Class{})
 
 	repo := &UserRepository{db}
 
