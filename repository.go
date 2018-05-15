@@ -131,7 +131,7 @@ func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
 	type Result struct {
 		Children_id string
 	}
-	fmt.Println(rolmenues)
+
 	var results []Result
 	var childrenid []string
 	if err := repo.db.Raw("SELECT children_id FROM menu_childrens").Scan(&results).Error; err != nil {
@@ -141,7 +141,7 @@ func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
 		childrenid = append(childrenid, result.Children_id)
 	}
 	// (*sql.Row)
-	fmt.Println(childrenid)
+
 	if err := repo.db.Not(childrenid).Where(rolmenues).Preload("Children", "id in (?)", rolmenues).Find(&menues).Error; err != nil {
 		return nil, err
 	}
@@ -158,6 +158,7 @@ func (repo *UserRepository) GetAllForms() ([]*pb.Form, error) {
 
 func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 	var form *pb.Form
+	fmt.Println("Getting form with id:", id)
 	form.Id = id
 	if err := repo.db.First(&form).Error; err != nil {
 		return nil, err
