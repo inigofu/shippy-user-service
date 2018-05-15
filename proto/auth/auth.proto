@@ -156,7 +156,10 @@ repeated Class styleClasses = 15;
 // @inject_tag: `gorm:"many2many:schema_buttons;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:button_id;jointable_foreignkey:schema_id;"default:'none'""`//Array of button objects. This is useful if you need some helper function to fill the field. (E.g. generate password, get GPS location..etc)*
 repeated Buttons buttons = 16;
 string FormRefer = 17;
-
+string onChanged = 18;
+string onValidated = 19;
+string get =20;
+string set = 21;
 }
 
 message Validator {
@@ -165,7 +168,9 @@ message Validator {
 }
 message Buttons {
     string id =1;
-    string text = 2;
+    string classes = 2;
+    string label = 3;
+    string onclick = 4;
 }
 message Class {
     string class = 2;
