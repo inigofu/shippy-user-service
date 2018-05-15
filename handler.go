@@ -182,7 +182,7 @@ func (srv *service) CreateForm(ctx context.Context, req *pb.Form, res *pb.Respon
 	return nil
 }
 func (srv *service) GetForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
-	log.Println("Getting form: ", req)
+	log.Println("Getting form: ", req, "with id:", req.Id)
 	form, err := srv.repo.GetForm(req.Id)
 	if err != nil {
 		return err
