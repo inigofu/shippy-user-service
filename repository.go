@@ -159,7 +159,7 @@ func (repo *UserRepository) GetAllForms() ([]*pb.Form, error) {
 func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 	var form *pb.Form
 	fmt.Println("Getting form with id:", id)
-	form.Id = id
+	form = &pb.Form{Id: id}
 	if err := repo.db.First(&form).Error; err != nil {
 		return nil, err
 	}
