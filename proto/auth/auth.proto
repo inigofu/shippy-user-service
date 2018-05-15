@@ -160,6 +160,7 @@ string onChanged = 18;
 string onValidated = 19;
 string get =20;
 string set = 21;
+string inputType = 22;
 }
 
 message Validator {
