@@ -149,7 +149,7 @@ func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
 }
 func (repo *UserRepository) GetAllForms() ([]*pb.Form, error) {
 	var forms []*pb.Form
-	if err := repo.db.Find(&forms).Error; err != nil {
+	if err := repo.db.Preload("Fields").Preload("Tabs").Preload("Tabs.Fields").Find(&forms).Error; err != nil {
 		return nil, err
 	}
 	return forms, nil

@@ -191,6 +191,11 @@ func (srv *service) GetForm(ctx context.Context, req *pb.Form, res *pb.ResponseF
 	return nil
 }
 func (srv *service) GetAllForms(ctx context.Context, req *pb.Request, res *pb.ResponseForm) error {
+	forms, err := srv.repo.GetAllForms()
+	if err != nil {
+		return err
+	}
+	res.Forms = forms
 	return nil
 }
 
