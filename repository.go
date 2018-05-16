@@ -167,7 +167,7 @@ func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 }
 func (repo *UserRepository) UpdateForm(form *pb.Form) (*pb.Form, error) {
 	log.Println("Updating form", form)
-	if err := repo.db.Debug().Save(&form).Error; err != nil {
+	if err := repo.db.Save(&form).Error; err != nil {
 		return nil, err
 	}
 	return form, nil

@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"os"
+	"strconv"
 
 	pb "github.com/inigofu/shippy-user-service/proto/auth"
 	"github.com/micro/go-micro"
@@ -38,6 +40,9 @@ func main() {
 	db.AutoMigrate(&pb.Validator{})
 	db.AutoMigrate(&pb.Buttons{})
 	db.AutoMigrate(&pb.Class{})
+
+	dblog, _ := strconv.ParseBool(os.Getenv("DB_LOG"))
+	db.LogMode(dblog)
 
 	repo := &UserRepository{db}
 
