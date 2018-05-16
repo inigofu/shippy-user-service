@@ -165,7 +165,7 @@ func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 	return form, nil
 }
 func (repo *UserRepository) CreateForm(form *pb.Form) error {
-	if err := repo.db.Create(&form).Error; err != nil {
+	if err := repo.db.Set("gorm:association_autoupdate", false).Create(&form).Error; err != nil {
 		return err
 	}
 	return nil
