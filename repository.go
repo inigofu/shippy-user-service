@@ -159,7 +159,7 @@ func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 	var form *pb.Form
 	log.Println("Getting form with id:", id)
 	form = &pb.Form{Id: id}
-	if err := repo.db.Preload("Fields").First(&form).Error; err != nil {
+	if err := repo.db.Preload("Fields").Preload("Tabs").First(&form).Error; err != nil {
 		return nil, err
 	}
 	return form, nil

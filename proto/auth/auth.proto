@@ -121,6 +121,8 @@ message Form {
     string name=2;
     // @inject_tag: `gorm:"foreignkey:FormRefer"`
     repeated FormSchema fields=3;
+    // @inject_tag: gorm:"many2many:form_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:children_id;jointable_foreignkey:parent_id;"
+    repeated Form tabs =4;
 }
 message FormSchema {
 // @inject_tag: `gorm:""default:'none'""`//Type of field
