@@ -74,6 +74,7 @@ type AuthClient interface {
 	GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error)
 	CreateForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error)
 	GetForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error)
+	UpdateForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error)
 	GetAllForms(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseForm, error)
 	CreateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
 	GetSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
@@ -238,6 +239,16 @@ func (c *authClient) GetForm(ctx context.Context, in *Form, opts ...client.CallO
 	return out, nil
 }
 
+func (c *authClient) UpdateForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.UpdateForm", in)
+	out := new(ResponseForm)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authClient) GetAllForms(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseForm, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.GetAllForms", in)
 	out := new(ResponseForm)
@@ -295,6 +306,7 @@ type AuthHandler interface {
 	GetAllMenues(context.Context, *Request, *ResponseMenu) error
 	CreateForm(context.Context, *Form, *ResponseForm) error
 	GetForm(context.Context, *Form, *ResponseForm) error
+	UpdateForm(context.Context, *Form, *ResponseForm) error
 	GetAllForms(context.Context, *Request, *ResponseForm) error
 	CreateSchema(context.Context, *FormSchema, *ResponseFormSchema) error
 	GetSchema(context.Context, *FormSchema, *ResponseFormSchema) error
@@ -363,6 +375,10 @@ func (h *Auth) CreateForm(ctx context.Context, in *Form, out *ResponseForm) erro
 
 func (h *Auth) GetForm(ctx context.Context, in *Form, out *ResponseForm) error {
 	return h.AuthHandler.GetForm(ctx, in, out)
+}
+
+func (h *Auth) UpdateForm(ctx context.Context, in *Form, out *ResponseForm) error {
+	return h.AuthHandler.UpdateForm(ctx, in, out)
 }
 
 func (h *Auth) GetAllForms(ctx context.Context, in *Request, out *ResponseForm) error {

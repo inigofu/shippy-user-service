@@ -17,6 +17,7 @@ service Auth {
     rpc GetAllMenues(Request) returns (ResponseMenu) {}
     rpc CreateForm(Form) returns (ResponseForm) {}
     rpc GetForm(Form) returns (ResponseForm) {}
+    rpc UpdateForm(Form) returns (ResponseForm) {}
     rpc GetAllForms(Request) returns (ResponseForm) {}
     rpc CreateSchema(FormSchema) returns (ResponseFormSchema) {}
     rpc GetSchema(FormSchema) returns (ResponseFormSchema) {}

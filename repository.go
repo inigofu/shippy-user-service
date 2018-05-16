@@ -20,6 +20,7 @@ type Repository interface {
 	CreateMenu(menu *pb.Menu) error
 	GetUserMenus(userid string) ([]*pb.Menu, error)
 	GetForm(id string) (*pb.Form, error)
+	UpdateForm(form *pb.Form) (*pb.Form, error)
 	CreateForm(form *pb.Form) error
 	GetAllForms() ([]*pb.Form, error)
 	GetSchema(id string) (*pb.FormSchema, error)
@@ -160,6 +161,13 @@ func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 	log.Println("Getting form with id:", id)
 	form = &pb.Form{Id: id}
 	if err := repo.db.Preload("Fields").Preload("Tabs").Preload("Tabs.Fields").First(&form).Error; err != nil {
+		return nil, err
+	}
+	return form, nil
+}
+func (repo *UserRepository) UpdateForm(form *pb.Form) (*pb.Form, error) {
+	log.Println("Updating form", form)
+	if err := repo.db.Save(&form).Error; err != nil {
 		return nil, err
 	}
 	return form, nil
