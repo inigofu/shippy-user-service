@@ -12,3 +12,67 @@ func (model *User) BeforeCreate(scope *gorm.Scope) error {
 	}
 	return scope.SetColumn("Id", uuid.String())
 }
+
+func (model *Menu) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *Role) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *Form) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *FormSchema) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *Badge) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *Wrapper) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *Atributes) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *Validator) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *Buttons) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
