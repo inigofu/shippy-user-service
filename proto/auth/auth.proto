@@ -164,6 +164,17 @@ string onValidated = 19;
 string get =20;
 string set = 21;
 string inputType = 22;
+int32 width = 23;
+int32 offset = 24;
+int32 xs = 25;
+int32 sm = 26;
+int32 md = 27;
+int32 lg = 28;
+int32 xs_offset = 29;
+int32 sm_offset = 30;
+int32 md_offset = 31;
+int32 lg_offset = 32;
+int32 order = 33;
 }
 
 message Validator {
