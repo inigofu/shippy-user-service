@@ -176,6 +176,10 @@ func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 }
 func (repo *UserRepository) DeleteForm(form *pb.Form) error {
 
+	if err := repo.db.Delete(pb.FormSchema{}, "form_refer = ?", form.Id).Error; err != nil {
+		return err
+	}
+
 	if err := repo.db.Delete(&form).Error; err != nil {
 		return err
 	}
