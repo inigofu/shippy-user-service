@@ -18,6 +18,7 @@ service Auth {
     rpc CreateForm(Form) returns (ResponseForm) {}
     rpc GetForm(Form) returns (ResponseForm) {}
     rpc UpdateForm(Form) returns (ResponseForm) {}
+    rpc DeleteForm(Form) returns (ResponseForm) {}
     rpc GetAllForms(Request) returns (ResponseForm) {}
     rpc CreateSchema(FormSchema) returns (ResponseFormSchema) {}
     rpc GetSchema(FormSchema) returns (ResponseFormSchema) {}

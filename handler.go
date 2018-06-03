@@ -190,6 +190,15 @@ func (srv *service) GetForm(ctx context.Context, req *pb.Form, res *pb.ResponseF
 	res.Form = form
 	return nil
 }
+func (srv *service) DeleteForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
+	log.Println("Getting form: ", req, "with id:", req.Id)
+	err := srv.repo.DeleteForm(req)
+	if err != nil {
+		return err
+	}
+	res.Form = nil
+	return nil
+}
 func (srv *service) UpdateForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
 	log.Println("Updating form: ", req, "with id:", req.Id)
 	form, err := srv.repo.UpdateForm(req)

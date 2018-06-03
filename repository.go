@@ -20,6 +20,7 @@ type Repository interface {
 	CreateMenu(menu *pb.Menu) error
 	GetUserMenus(userid string) ([]*pb.Menu, error)
 	GetForm(id string) (*pb.Form, error)
+	DeleteForm(form *pb.Form) error
 	UpdateForm(form *pb.Form) (*pb.Form, error)
 	CreateForm(form *pb.Form) error
 	GetAllForms() ([]*pb.Form, error)
@@ -172,6 +173,13 @@ func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 		return nil, err
 	}
 	return form, nil
+}
+func (repo *UserRepository) DeleteForm(form *pb.Form) error {
+
+	if err := repo.db.Delete(&form).Error; err != nil {
+		return err
+	}
+	return nil
 }
 func (repo *UserRepository) UpdateForm(form *pb.Form) (*pb.Form, error) {
 	log.Println("Updating form", form)
