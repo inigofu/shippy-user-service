@@ -158,9 +158,19 @@ func (srv *service) UpdateRole(ctx context.Context, req *pb.Role, res *pb.Respon
 	return nil
 }
 func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
+	role, err := srv.repo.GetRole(req.Id)
+	if err != nil {
+		return err
+	}
+	res.Role = role
 	return nil
 }
 func (srv *service) GetAllRoles(ctx context.Context, req *pb.Request, res *pb.ResponseRole) error {
+	roles, err := srv.repo.GetAllRoles()
+	if err != nil {
+		return err
+	}
+	res.Roles = roles
 	return nil
 }
 

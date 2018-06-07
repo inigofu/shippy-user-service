@@ -44,7 +44,7 @@ func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 
 func (repo *UserRepository) Get(id string) (*pb.User, error) {
 	var user *pb.User
-	user.Id = id
+	user = &pb.User{Id: id}
 	if err := repo.db.First(&user).Error; err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (repo *UserRepository) GetAllRoles() ([]*pb.Role, error) {
 
 func (repo *UserRepository) GetRole(id string) (*pb.Role, error) {
 	var role *pb.Role
-	role.Id = id
+	role = &pb.Role{Id: id}
 	if err := repo.db.First(&role).Error; err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (repo *UserRepository) GetAllMenues() ([]*pb.Menu, error) {
 
 func (repo *UserRepository) GetMenu(id string) (*pb.Menu, error) {
 	var menu *pb.Menu
-	menu.Id = id
+	menu = &pb.Menu{Id: id}
 	if err := repo.db.First(&menu).Error; err != nil {
 		return nil, err
 	}
@@ -215,7 +215,7 @@ func (repo *UserRepository) GetAllSchemas() ([]*pb.FormSchema, error) {
 
 func (repo *UserRepository) GetSchema(id string) (*pb.FormSchema, error) {
 	var formschema *pb.FormSchema
-	formschema.Id = id
+	formschema = &pb.FormSchema{Id: id}
 	if err := repo.db.First(&formschema).Error; err != nil {
 		return nil, err
 	}
