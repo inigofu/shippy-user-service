@@ -10,6 +10,7 @@ service Auth {
     rpc GetUserMenus(User) returns (ResponseMenu) {}
     rpc ValidateToken(Token) returns (ResponseToken) {}
     rpc CreateRole(Role) returns (ResponseRole) {}
+    rpc updateRole(Role) returns (ResponseRole) {}
     rpc GetRole(Role) returns (ResponseRole) {}
     rpc GetAllRoles(Request) returns (ResponseRole) {}
     rpc CreateMenu(Menu) returns (ResponseMenu) {}

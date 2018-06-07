@@ -147,6 +147,16 @@ func (srv *service) CreateRole(ctx context.Context, req *pb.Role, res *pb.Respon
 	res.Role = req
 	return nil
 }
+func (srv *service) UpdateRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
+	log.Println("Creating role: ", req)
+
+	if err := srv.repo.UpdateRole(req); err != nil {
+		return errors.New(fmt.Sprintf("error creating role: %v", err))
+	}
+
+	res.Role = req
+	return nil
+}
 func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
 	return nil
 }

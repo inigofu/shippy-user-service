@@ -67,6 +67,7 @@ type AuthClient interface {
 	GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error)
 	ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*ResponseToken, error)
 	CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
+	UpdateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	GetRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	GetAllRoles(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseRole, error)
 	CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
@@ -162,6 +163,16 @@ func (c *authClient) ValidateToken(ctx context.Context, in *Token, opts ...clien
 
 func (c *authClient) CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.CreateRole", in)
+	out := new(ResponseRole)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) UpdateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.updateRole", in)
 	out := new(ResponseRole)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -310,6 +321,7 @@ type AuthHandler interface {
 	GetUserMenus(context.Context, *User, *ResponseMenu) error
 	ValidateToken(context.Context, *Token, *ResponseToken) error
 	CreateRole(context.Context, *Role, *ResponseRole) error
+	UpdateRole(context.Context, *Role, *ResponseRole) error
 	GetRole(context.Context, *Role, *ResponseRole) error
 	GetAllRoles(context.Context, *Request, *ResponseRole) error
 	CreateMenu(context.Context, *Menu, *ResponseMenu) error
@@ -359,6 +371,10 @@ func (h *Auth) ValidateToken(ctx context.Context, in *Token, out *ResponseToken)
 
 func (h *Auth) CreateRole(ctx context.Context, in *Role, out *ResponseRole) error {
 	return h.AuthHandler.CreateRole(ctx, in, out)
+}
+
+func (h *Auth) UpdateRole(ctx context.Context, in *Role, out *ResponseRole) error {
+	return h.AuthHandler.UpdateRole(ctx, in, out)
 }
 
 func (h *Auth) GetRole(ctx context.Context, in *Role, out *ResponseRole) error {

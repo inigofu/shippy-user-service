@@ -15,6 +15,7 @@ type Repository interface {
 	GetAllRoles() ([]*pb.Role, error)
 	GetRole(id string) (*pb.Role, error)
 	CreateRole(role *pb.Role) error
+	UpdateRole(role *pb.Role) error
 	GetAllMenues() ([]*pb.Menu, error)
 	GetMenu(id string) (*pb.Menu, error)
 	CreateMenu(menu *pb.Menu) error
@@ -84,6 +85,12 @@ func (repo *UserRepository) GetRole(id string) (*pb.Role, error) {
 }
 func (repo *UserRepository) CreateRole(role *pb.Role) error {
 	if err := repo.db.Set("gorm:association_autoupdate", false).Create(&role).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) UpdateRole(role *pb.Role) error {
+	if err := repo.db.Set("gorm:association_autoupdate", false).Save(&role).Error; err != nil {
 		return err
 	}
 	return nil
