@@ -69,7 +69,7 @@ func (repo *UserRepository) Create(user *pb.User) error {
 
 func (repo *UserRepository) GetAllRoles() ([]*pb.Role, error) {
 	var roles []*pb.Role
-	if err := repo.db.Find(&roles).Error; err != nil {
+	if err := repo.db.Preload("Menues").Preload("Users").Find(&roles).Error; err != nil {
 		return nil, err
 	}
 	return roles, nil
@@ -78,7 +78,7 @@ func (repo *UserRepository) GetAllRoles() ([]*pb.Role, error) {
 func (repo *UserRepository) GetRole(id string) (*pb.Role, error) {
 	var role *pb.Role
 	role = &pb.Role{Id: id}
-	if err := repo.db.First(&role).Error; err != nil {
+	if err := repo.db.Preload("Menues").Preload("Users").First(&role).Error; err != nil {
 		return nil, err
 	}
 	return role, nil
