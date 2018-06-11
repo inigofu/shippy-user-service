@@ -62,13 +62,6 @@ func (model *Atributes) BeforeCreate(scope *gorm.Scope) error {
 	}
 	return scope.SetColumn("Id", uuid.String())
 }
-func (model *Validator) BeforeCreate(scope *gorm.Scope) error {
-	uuid, err := uuid.NewV4()
-	if err != nil {
-		return err
-	}
-	return scope.SetColumn("Id", uuid.String())
-}
 func (model *Buttons) BeforeCreate(scope *gorm.Scope) error {
 	uuid, err := uuid.NewV4()
 	if err != nil {
