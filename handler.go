@@ -236,6 +236,24 @@ func (srv *service) GetAllForms(ctx context.Context, req *pb.Request, res *pb.Re
 	res.Forms = forms
 	return nil
 }
+func (srv *service) DeleteFields(ctx context.Context, req *pb.Form, res *pb.Error) error {
+	log.Println("Deleting fields")
+	err := srv.repo.DeleteFields(req)
+	if err != nil {
+		return err
+	}
+	res = nil
+	return nil
+}
+func (srv *service) DeleteTabs(ctx context.Context, req *pb.Form, res *pb.Error) error {
+	log.Println("Deleting tabs")
+	err := srv.repo.DeleteTabs(req)
+	if err != nil {
+		return err
+	}
+	res = nil
+	return nil
+}
 
 func (srv *service) CreateSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
 	log.Println("Creating schema: ", req)

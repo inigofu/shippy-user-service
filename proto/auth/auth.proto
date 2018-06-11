@@ -13,6 +13,8 @@ service Auth {
     rpc updateRole(Role) returns (ResponseRole) {}
     rpc GetRole(Role) returns (ResponseRole) {}
     rpc GetAllRoles(Request) returns (ResponseRole) {}
+    rpc DeleteFields(Form) returns (Error) {}
+    rpc DeleteTabs(Form) returns (Error) {}
     rpc CreateMenu(Menu) returns (ResponseMenu) {}
     rpc GetMenu(Menu) returns (ResponseMenu) {}
     rpc GetAllMenues(Request) returns (ResponseMenu) {}

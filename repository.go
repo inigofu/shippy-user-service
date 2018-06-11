@@ -28,6 +28,8 @@ type Repository interface {
 	GetSchema(id string) (*pb.FormSchema, error)
 	CreateSchema(schema *pb.FormSchema) error
 	GetAllSchemas() ([]*pb.FormSchema, error)
+	DeleteFields(form *pb.Form) error
+	DeleteTabs(form *pb.Form) error
 }
 
 type UserRepository struct {
@@ -188,6 +190,23 @@ func (repo *UserRepository) DeleteForm(form *pb.Form) error {
 	}
 
 	if err := repo.db.Delete(&form).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) DeleteFields(form *pb.Form) error {
+	var field *pb.FormSchema
+	field = form.Fields[0]
+	if err := repo.db.Model(&form).Association("Fields").Delete(field).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) DeleteTabs(form *pb.Form) error {
+
+	var tab *pb.Form
+	tab = form.Tabs[0]
+	if err := repo.db.Model(&form).Association("Tabs").Delete(tab).Error; err != nil {
 		return err
 	}
 	return nil

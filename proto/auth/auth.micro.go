@@ -70,6 +70,8 @@ type AuthClient interface {
 	UpdateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	GetRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	GetAllRoles(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseRole, error)
+	DeleteFields(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error)
+	DeleteTabs(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error)
 	CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
 	GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
 	GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error)
@@ -201,6 +203,26 @@ func (c *authClient) GetAllRoles(ctx context.Context, in *Request, opts ...clien
 	return out, nil
 }
 
+func (c *authClient) DeleteFields(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.DeleteFields", in)
+	out := new(Error)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) DeleteTabs(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.DeleteTabs", in)
+	out := new(Error)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authClient) CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.CreateMenu", in)
 	out := new(ResponseMenu)
@@ -324,6 +346,8 @@ type AuthHandler interface {
 	UpdateRole(context.Context, *Role, *ResponseRole) error
 	GetRole(context.Context, *Role, *ResponseRole) error
 	GetAllRoles(context.Context, *Request, *ResponseRole) error
+	DeleteFields(context.Context, *Form, *Error) error
+	DeleteTabs(context.Context, *Form, *Error) error
 	CreateMenu(context.Context, *Menu, *ResponseMenu) error
 	GetMenu(context.Context, *Menu, *ResponseMenu) error
 	GetAllMenues(context.Context, *Request, *ResponseMenu) error
@@ -383,6 +407,14 @@ func (h *Auth) GetRole(ctx context.Context, in *Role, out *ResponseRole) error {
 
 func (h *Auth) GetAllRoles(ctx context.Context, in *Request, out *ResponseRole) error {
 	return h.AuthHandler.GetAllRoles(ctx, in, out)
+}
+
+func (h *Auth) DeleteFields(ctx context.Context, in *Form, out *Error) error {
+	return h.AuthHandler.DeleteFields(ctx, in, out)
+}
+
+func (h *Auth) DeleteTabs(ctx context.Context, in *Form, out *Error) error {
+	return h.AuthHandler.DeleteTabs(ctx, in, out)
 }
 
 func (h *Auth) CreateMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
