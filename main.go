@@ -37,7 +37,6 @@ func main() {
 	db.AutoMigrate(&pb.Atributes{})
 	db.AutoMigrate(&pb.Form{})
 	db.AutoMigrate(&pb.FormSchema{})
-	db.AutoMigrate(&pb.Validator{})
 	db.AutoMigrate(&pb.Buttons{})
 	db.AutoMigrate(&pb.Class{})
 

@@ -25,7 +25,6 @@ It has these top-level messages:
 	Atributes
 	Form
 	FormSchema
-	Validator
 	Buttons
 	Class
 */
