@@ -63,14 +63,15 @@ type AuthClient interface {
 	Get(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	GetAll(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseUser, error)
 	Auth(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseToken, error)
+	UpdateUser(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
+	DeleteUser(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error)
 	ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*ResponseToken, error)
 	CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	UpdateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	GetRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	GetAllRoles(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseRole, error)
-	DeleteFields(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error)
-	DeleteTabs(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error)
+	DeleteRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
 	GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
 	GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error)
@@ -79,6 +80,8 @@ type AuthClient interface {
 	UpdateForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error)
 	DeleteForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error)
 	GetAllForms(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseForm, error)
+	DeleteFields(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error)
+	DeleteTabs(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error)
 	CreateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
 	GetSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
 	GetAllSchemas(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseFormSchema, error)
@@ -135,6 +138,26 @@ func (c *authClient) GetAll(ctx context.Context, in *Request, opts ...client.Cal
 func (c *authClient) Auth(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseToken, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.Auth", in)
 	out := new(ResponseToken)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) UpdateUser(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.UpdateUser", in)
+	out := new(ResponseUser)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) DeleteUser(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.DeleteUser", in)
+	out := new(ResponseUser)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -202,19 +225,9 @@ func (c *authClient) GetAllRoles(ctx context.Context, in *Request, opts ...clien
 	return out, nil
 }
 
-func (c *authClient) DeleteFields(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.DeleteFields", in)
-	out := new(Error)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) DeleteTabs(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error) {
-	req := c.c.NewRequest(c.serviceName, "Auth.DeleteTabs", in)
-	out := new(Error)
+func (c *authClient) DeleteRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.deleteRole", in)
+	out := new(ResponseRole)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -302,6 +315,26 @@ func (c *authClient) GetAllForms(ctx context.Context, in *Request, opts ...clien
 	return out, nil
 }
 
+func (c *authClient) DeleteFields(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.DeleteFields", in)
+	out := new(Error)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) DeleteTabs(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.DeleteTabs", in)
+	out := new(Error)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authClient) CreateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.CreateSchema", in)
 	out := new(ResponseFormSchema)
@@ -339,14 +372,15 @@ type AuthHandler interface {
 	Get(context.Context, *User, *ResponseUser) error
 	GetAll(context.Context, *Request, *ResponseUser) error
 	Auth(context.Context, *User, *ResponseToken) error
+	UpdateUser(context.Context, *User, *ResponseUser) error
+	DeleteUser(context.Context, *User, *ResponseUser) error
 	GetUserMenus(context.Context, *User, *ResponseMenu) error
 	ValidateToken(context.Context, *Token, *ResponseToken) error
 	CreateRole(context.Context, *Role, *ResponseRole) error
 	UpdateRole(context.Context, *Role, *ResponseRole) error
 	GetRole(context.Context, *Role, *ResponseRole) error
 	GetAllRoles(context.Context, *Request, *ResponseRole) error
-	DeleteFields(context.Context, *Form, *Error) error
-	DeleteTabs(context.Context, *Form, *Error) error
+	DeleteRole(context.Context, *Role, *ResponseRole) error
 	CreateMenu(context.Context, *Menu, *ResponseMenu) error
 	GetMenu(context.Context, *Menu, *ResponseMenu) error
 	GetAllMenues(context.Context, *Request, *ResponseMenu) error
@@ -355,6 +389,8 @@ type AuthHandler interface {
 	UpdateForm(context.Context, *Form, *ResponseForm) error
 	DeleteForm(context.Context, *Form, *ResponseForm) error
 	GetAllForms(context.Context, *Request, *ResponseForm) error
+	DeleteFields(context.Context, *Form, *Error) error
+	DeleteTabs(context.Context, *Form, *Error) error
 	CreateSchema(context.Context, *FormSchema, *ResponseFormSchema) error
 	GetSchema(context.Context, *FormSchema, *ResponseFormSchema) error
 	GetAllSchemas(context.Context, *Request, *ResponseFormSchema) error
@@ -384,6 +420,14 @@ func (h *Auth) Auth(ctx context.Context, in *User, out *ResponseToken) error {
 	return h.AuthHandler.Auth(ctx, in, out)
 }
 
+func (h *Auth) UpdateUser(ctx context.Context, in *User, out *ResponseUser) error {
+	return h.AuthHandler.UpdateUser(ctx, in, out)
+}
+
+func (h *Auth) DeleteUser(ctx context.Context, in *User, out *ResponseUser) error {
+	return h.AuthHandler.DeleteUser(ctx, in, out)
+}
+
 func (h *Auth) GetUserMenus(ctx context.Context, in *User, out *ResponseMenu) error {
 	return h.AuthHandler.GetUserMenus(ctx, in, out)
 }
@@ -408,12 +452,8 @@ func (h *Auth) GetAllRoles(ctx context.Context, in *Request, out *ResponseRole) 
 	return h.AuthHandler.GetAllRoles(ctx, in, out)
 }
 
-func (h *Auth) DeleteFields(ctx context.Context, in *Form, out *Error) error {
-	return h.AuthHandler.DeleteFields(ctx, in, out)
-}
-
-func (h *Auth) DeleteTabs(ctx context.Context, in *Form, out *Error) error {
-	return h.AuthHandler.DeleteTabs(ctx, in, out)
+func (h *Auth) DeleteRole(ctx context.Context, in *Role, out *ResponseRole) error {
+	return h.AuthHandler.DeleteRole(ctx, in, out)
 }
 
 func (h *Auth) CreateMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
@@ -446,6 +486,14 @@ func (h *Auth) DeleteForm(ctx context.Context, in *Form, out *ResponseForm) erro
 
 func (h *Auth) GetAllForms(ctx context.Context, in *Request, out *ResponseForm) error {
 	return h.AuthHandler.GetAllForms(ctx, in, out)
+}
+
+func (h *Auth) DeleteFields(ctx context.Context, in *Form, out *Error) error {
+	return h.AuthHandler.DeleteFields(ctx, in, out)
+}
+
+func (h *Auth) DeleteTabs(ctx context.Context, in *Form, out *Error) error {
+	return h.AuthHandler.DeleteTabs(ctx, in, out)
 }
 
 func (h *Auth) CreateSchema(ctx context.Context, in *FormSchema, out *ResponseFormSchema) error {

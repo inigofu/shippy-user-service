@@ -10,12 +10,15 @@ import (
 type Repository interface {
 	GetAll() ([]*pb.User, error)
 	Get(id string) (*pb.User, error)
+	UpdateUser(*pb.User) error
+	DeleteUser(*pb.User) error
 	Create(user *pb.User) error
 	GetByEmail(email string) (*pb.User, error)
 	GetAllRoles() ([]*pb.Role, error)
 	GetRole(id string) (*pb.Role, error)
 	CreateRole(role *pb.Role) error
 	UpdateRole(role *pb.Role) error
+	DeleteRole(role *pb.Role) error
 	GetAllMenues() ([]*pb.Menu, error)
 	GetMenu(id string) (*pb.Menu, error)
 	CreateMenu(menu *pb.Menu) error
@@ -68,6 +71,18 @@ func (repo *UserRepository) Create(user *pb.User) error {
 	}
 	return nil
 }
+func (repo *UserRepository) UpdateUser(user *pb.User) error {
+	if err := repo.db.Set("gorm:association_autoupdate", false).Save(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) DeleteUser(user *pb.User) error {
+	if err := repo.db.Delete(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
 
 func (repo *UserRepository) GetAllRoles() ([]*pb.Role, error) {
 	var roles []*pb.Role
@@ -93,6 +108,12 @@ func (repo *UserRepository) CreateRole(role *pb.Role) error {
 }
 func (repo *UserRepository) UpdateRole(role *pb.Role) error {
 	if err := repo.db.Set("gorm:association_autoupdate", false).Save(&role).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) DeleteRole(role *pb.Role) error {
+	if err := repo.db.Delete(&role).Error; err != nil {
 		return err
 	}
 	return nil

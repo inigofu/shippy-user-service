@@ -7,14 +7,15 @@ service Auth {
     rpc Get(User) returns (ResponseUser) {}
     rpc GetAll(Request) returns (ResponseUser) {}
     rpc Auth(User) returns (ResponseToken) {}
+    rpc UpdateUser(User) returns (ResponseUser) {}
+    rpc DeleteUser(User) returns (ResponseUser) {}
     rpc GetUserMenus(User) returns (ResponseMenu) {}
     rpc ValidateToken(Token) returns (ResponseToken) {}
     rpc CreateRole(Role) returns (ResponseRole) {}
     rpc updateRole(Role) returns (ResponseRole) {}
     rpc GetRole(Role) returns (ResponseRole) {}
     rpc GetAllRoles(Request) returns (ResponseRole) {}
-    rpc DeleteFields(Form) returns (Error) {}
-    rpc DeleteTabs(Form) returns (Error) {}
+    rpc deleteRole(Role) returns (ResponseRole) {}
     rpc CreateMenu(Menu) returns (ResponseMenu) {}
     rpc GetMenu(Menu) returns (ResponseMenu) {}
     rpc GetAllMenues(Request) returns (ResponseMenu) {}
@@ -23,6 +24,8 @@ service Auth {
     rpc UpdateForm(Form) returns (ResponseForm) {}
     rpc DeleteForm(Form) returns (ResponseForm) {}
     rpc GetAllForms(Request) returns (ResponseForm) {}
+    rpc DeleteFields(Form) returns (Error) {}
+    rpc DeleteTabs(Form) returns (Error) {}
     rpc CreateSchema(FormSchema) returns (ResponseFormSchema) {}
     rpc GetSchema(FormSchema) returns (ResponseFormSchema) {}
     rpc GetAllSchemas(Request) returns (ResponseFormSchema) {}

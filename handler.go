@@ -63,6 +63,22 @@ func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.Respons
 	res.Users = users
 	return nil
 }
+func (srv *service) UpdateUser(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
+	err := srv.repo.UpdateUser(req)
+	if err != nil {
+		return err
+	}
+	res.User = req
+	return nil
+}
+func (srv *service) DeleteUser(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
+	err := srv.repo.DeleteUser(req)
+	if err != nil {
+		return err
+	}
+	res.User = nil
+	return nil
+}
 
 func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.ResponseToken) error {
 	log.Println("Logging in with:", req.Email, req.Password)
@@ -163,6 +179,14 @@ func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseR
 		return err
 	}
 	res.Role = role
+	return nil
+}
+func (srv *service) DeleteRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
+	err := srv.repo.DeleteRole(req)
+	if err != nil {
+		return err
+	}
+	res.Role = nil
 	return nil
 }
 func (srv *service) GetAllRoles(ctx context.Context, req *pb.Request, res *pb.ResponseRole) error {
