@@ -41,6 +41,7 @@ type UserRepository struct {
 }
 
 func (repo *UserRepository) GetAll() ([]*pb.User, error) {
+	log.Println("Entering GetAll")
 	var users []*pb.User
 	if err := repo.db.Find(&users).Error; err != nil {
 		return nil, err
@@ -49,6 +50,7 @@ func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 }
 
 func (repo *UserRepository) GetAllUsersRole() ([]*pb.User, error) {
+	log.Println("Entering GetAllUsersRole")
 	var users []*pb.User
 	if err := repo.db.Preload("Roles").Find(&users).Error; err != nil {
 		return nil, err
