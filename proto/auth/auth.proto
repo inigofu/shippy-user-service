@@ -183,6 +183,10 @@ int32 sm_offset = 30;
 int32 md_offset = 31;
 int32 lg_offset = 32;
 int32 order = 33;
+// @inject_tag: `gorm:"foreignkey:SchemaRefer"`
+SelectOptions selectoptions = 34;
+// @inject_tag: `gorm:"foreignkey:SchemaRefer"`
+repeated Values values = 45;
 }
 message Buttons {
     string id =1;
@@ -193,3 +197,22 @@ message Buttons {
 message Class {
     string class = 2;
 }
+
+message SelectOptions {
+    string id = 1;
+    bool multiple = 3;
+    bool searchable = 4;
+    bool clearOnSelect = 5;
+    bool hideSelected = 6;
+    bool taggable = 7;
+    string tagPlaceholder = 2;
+    string onNewTag = 8;
+    string onSearch = 9;
+    string SchemaRefer =10;
+}
+message Values {
+    string id = 1;
+    string value = 2;
+    string SchemaRefer = 3;
+}
+      

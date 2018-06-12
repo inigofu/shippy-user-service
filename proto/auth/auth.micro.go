@@ -27,6 +27,8 @@ It has these top-level messages:
 	FormSchema
 	Buttons
 	Class
+	SelectOptions
+	Values
 */
 package auth
 

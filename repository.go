@@ -194,7 +194,7 @@ func (repo *UserRepository) GetAllForms() ([]*pb.Form, error) {
 	var forms []*pb.Form
 	if err := repo.db.Preload("Fields", func(db *gorm.DB) *gorm.DB {
 		return repo.db.Order("form_schemas.order ASC")
-	}).Preload("Tabs").Preload("Tabs.Fields", func(db *gorm.DB) *gorm.DB {
+	}).Preload("Fields.Values").Preload("Fields.SelectOptions").Preload("Tabs").Preload("Tabs.Fields", func(db *gorm.DB) *gorm.DB {
 		return repo.db.Order("form_schemas.order ASC")
 	}).Find(&forms).Error; err != nil {
 		return nil, err
@@ -208,7 +208,7 @@ func (repo *UserRepository) GetForm(id string) (*pb.Form, error) {
 	form = &pb.Form{Id: id}
 	if err := repo.db.Preload("Fields", func(db *gorm.DB) *gorm.DB {
 		return repo.db.Order("form_schemas.order ASC")
-	}).Preload("Tabs").Preload("Tabs.Fields", func(db *gorm.DB) *gorm.DB {
+	}).Preload("Fields.Values").Preload("Fields.SelectOptions").Preload("Tabs").Preload("Tabs.Fields", func(db *gorm.DB) *gorm.DB {
 		return repo.db.Order("form_schemas.order ASC")
 	}).First(&form).Error; err != nil {
 		return nil, err

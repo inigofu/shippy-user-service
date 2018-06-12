@@ -39,6 +39,8 @@ func main() {
 	db.AutoMigrate(&pb.FormSchema{})
 	db.AutoMigrate(&pb.Buttons{})
 	db.AutoMigrate(&pb.Class{})
+	db.AutoMigrate(&pb.Values{})
+	db.AutoMigrate(&pb.SelectOptions{})
 
 	dblog, _ := strconv.ParseBool(os.Getenv("DB_LOG"))
 	db.LogMode(dblog)
