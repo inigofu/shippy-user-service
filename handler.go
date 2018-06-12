@@ -63,6 +63,14 @@ func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.Respons
 	res.Users = users
 	return nil
 }
+func (srv *service) GetAllUsersRole(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
+	users, err := srv.repo.GetAllUsersRole()
+	if err != nil {
+		return err
+	}
+	res.Users = users
+	return nil
+}
 func (srv *service) UpdateUser(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 	err := srv.repo.UpdateUser(req)
 	if err != nil {

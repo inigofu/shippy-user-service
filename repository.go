@@ -9,6 +9,7 @@ import (
 
 type Repository interface {
 	GetAll() ([]*pb.User, error)
+	GetAllUsersRole() ([]*pb.User, error)
 	Get(id string) (*pb.User, error)
 	UpdateUser(*pb.User) error
 	DeleteUser(*pb.User) error
@@ -42,6 +43,14 @@ type UserRepository struct {
 func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 	var users []*pb.User
 	if err := repo.db.Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func (repo *UserRepository) GetAllUsersRole() ([]*pb.User, error) {
+	var users []*pb.User
+	if err := repo.db.Preload("Roles").Find(&users).Error; err != nil {
 		return nil, err
 	}
 	return users, nil

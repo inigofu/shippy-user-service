@@ -62,6 +62,7 @@ type AuthClient interface {
 	Create(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	Get(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	GetAll(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseUser, error)
+	GetAllUsersRole(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseUser, error)
 	Auth(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseToken, error)
 	UpdateUser(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	DeleteUser(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
@@ -127,6 +128,16 @@ func (c *authClient) Get(ctx context.Context, in *User, opts ...client.CallOptio
 
 func (c *authClient) GetAll(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseUser, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.GetAll", in)
+	out := new(ResponseUser)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) GetAllUsersRole(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseUser, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.GetAllUsersRole", in)
 	out := new(ResponseUser)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -371,6 +382,7 @@ type AuthHandler interface {
 	Create(context.Context, *User, *ResponseUser) error
 	Get(context.Context, *User, *ResponseUser) error
 	GetAll(context.Context, *Request, *ResponseUser) error
+	GetAllUsersRole(context.Context, *Request, *ResponseUser) error
 	Auth(context.Context, *User, *ResponseToken) error
 	UpdateUser(context.Context, *User, *ResponseUser) error
 	DeleteUser(context.Context, *User, *ResponseUser) error
@@ -414,6 +426,10 @@ func (h *Auth) Get(ctx context.Context, in *User, out *ResponseUser) error {
 
 func (h *Auth) GetAll(ctx context.Context, in *Request, out *ResponseUser) error {
 	return h.AuthHandler.GetAll(ctx, in, out)
+}
+
+func (h *Auth) GetAllUsersRole(ctx context.Context, in *Request, out *ResponseUser) error {
+	return h.AuthHandler.GetAllUsersRole(ctx, in, out)
 }
 
 func (h *Auth) Auth(ctx context.Context, in *User, out *ResponseToken) error {

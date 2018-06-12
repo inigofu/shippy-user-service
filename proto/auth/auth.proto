@@ -6,6 +6,7 @@ service Auth {
     rpc Create(User) returns (ResponseUser) {}
     rpc Get(User) returns (ResponseUser) {}
     rpc GetAll(Request) returns (ResponseUser) {}
+    rpc GetAllUsersRole(Request) returns (ResponseUser) {}
     rpc Auth(User) returns (ResponseToken) {}
     rpc UpdateUser(User) returns (ResponseUser) {}
     rpc DeleteUser(User) returns (ResponseUser) {}
