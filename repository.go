@@ -266,7 +266,7 @@ func (repo *UserRepository) CreateForm(form *pb.Form) error {
 }
 func (repo *UserRepository) GetAllSchemas() ([]*pb.FormSchema, error) {
 	var formschemas []*pb.FormSchema
-	if err := repo.db.Find(&formschemas).Error; err != nil {
+	if err := repo.db.Preload("Values").Preload("Selectoptions").Find(&formschemas).Error; err != nil {
 		return nil, err
 	}
 	return formschemas, nil
@@ -275,7 +275,7 @@ func (repo *UserRepository) GetAllSchemas() ([]*pb.FormSchema, error) {
 func (repo *UserRepository) GetSchema(id string) (*pb.FormSchema, error) {
 	var formschema *pb.FormSchema
 	formschema = &pb.FormSchema{Id: id}
-	if err := repo.db.First(&formschema).Error; err != nil {
+	if err := repo.db.Preload("Values").Preload("Selectoptions").First(&formschema).Error; err != nil {
 		return nil, err
 	}
 	return formschema, nil
