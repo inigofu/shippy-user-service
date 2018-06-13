@@ -18,6 +18,7 @@ service Auth {
     rpc GetAllRoles(Request) returns (ResponseRole) {}
     rpc deleteRole(Role) returns (ResponseRole) {}
     rpc CreateMenu(Menu) returns (ResponseMenu) {}
+    rpc UpdateMenu(Menu) returns (ResponseMenu) {}
     rpc GetMenu(Menu) returns (ResponseMenu) {}
     rpc GetAllMenues(Request) returns (ResponseMenu) {}
     rpc CreateForm(Form) returns (ResponseForm) {}
@@ -29,6 +30,7 @@ service Auth {
     rpc DeleteTabs(Form) returns (Error) {}
     rpc CreateSchema(FormSchema) returns (ResponseFormSchema) {}
     rpc GetSchema(FormSchema) returns (ResponseFormSchema) {}
+    rpc UpdateSchema(FormSchema) returns (ResponseFormSchema) {}
     rpc GetAllSchemas(Request) returns (ResponseFormSchema) {}
 }
 

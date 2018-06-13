@@ -76,6 +76,7 @@ type AuthClient interface {
 	GetAllRoles(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseRole, error)
 	DeleteRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	CreateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
+	UpdateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
 	GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error)
 	GetAllMenues(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseMenu, error)
 	CreateForm(ctx context.Context, in *Form, opts ...client.CallOption) (*ResponseForm, error)
@@ -87,6 +88,7 @@ type AuthClient interface {
 	DeleteTabs(ctx context.Context, in *Form, opts ...client.CallOption) (*Error, error)
 	CreateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
 	GetSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
+	UpdateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
 	GetAllSchemas(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseFormSchema, error)
 }
 
@@ -258,6 +260,16 @@ func (c *authClient) CreateMenu(ctx context.Context, in *Menu, opts ...client.Ca
 	return out, nil
 }
 
+func (c *authClient) UpdateMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.UpdateMenu", in)
+	out := new(ResponseMenu)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authClient) GetMenu(ctx context.Context, in *Menu, opts ...client.CallOption) (*ResponseMenu, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.GetMenu", in)
 	out := new(ResponseMenu)
@@ -368,6 +380,16 @@ func (c *authClient) GetSchema(ctx context.Context, in *FormSchema, opts ...clie
 	return out, nil
 }
 
+func (c *authClient) UpdateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.UpdateSchema", in)
+	out := new(ResponseFormSchema)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authClient) GetAllSchemas(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseFormSchema, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.GetAllSchemas", in)
 	out := new(ResponseFormSchema)
@@ -396,6 +418,7 @@ type AuthHandler interface {
 	GetAllRoles(context.Context, *Request, *ResponseRole) error
 	DeleteRole(context.Context, *Role, *ResponseRole) error
 	CreateMenu(context.Context, *Menu, *ResponseMenu) error
+	UpdateMenu(context.Context, *Menu, *ResponseMenu) error
 	GetMenu(context.Context, *Menu, *ResponseMenu) error
 	GetAllMenues(context.Context, *Request, *ResponseMenu) error
 	CreateForm(context.Context, *Form, *ResponseForm) error
@@ -407,6 +430,7 @@ type AuthHandler interface {
 	DeleteTabs(context.Context, *Form, *Error) error
 	CreateSchema(context.Context, *FormSchema, *ResponseFormSchema) error
 	GetSchema(context.Context, *FormSchema, *ResponseFormSchema) error
+	UpdateSchema(context.Context, *FormSchema, *ResponseFormSchema) error
 	GetAllSchemas(context.Context, *Request, *ResponseFormSchema) error
 }
 
@@ -478,6 +502,10 @@ func (h *Auth) CreateMenu(ctx context.Context, in *Menu, out *ResponseMenu) erro
 	return h.AuthHandler.CreateMenu(ctx, in, out)
 }
 
+func (h *Auth) UpdateMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
+	return h.AuthHandler.UpdateMenu(ctx, in, out)
+}
+
 func (h *Auth) GetMenu(ctx context.Context, in *Menu, out *ResponseMenu) error {
 	return h.AuthHandler.GetMenu(ctx, in, out)
 }
@@ -520,6 +548,10 @@ func (h *Auth) CreateSchema(ctx context.Context, in *FormSchema, out *ResponseFo
 
 func (h *Auth) GetSchema(ctx context.Context, in *FormSchema, out *ResponseFormSchema) error {
 	return h.AuthHandler.GetSchema(ctx, in, out)
+}
+
+func (h *Auth) UpdateSchema(ctx context.Context, in *FormSchema, out *ResponseFormSchema) error {
+	return h.AuthHandler.UpdateSchema(ctx, in, out)
 }
 
 func (h *Auth) GetAllSchemas(ctx context.Context, in *Request, out *ResponseFormSchema) error {

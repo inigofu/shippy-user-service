@@ -216,10 +216,30 @@ func (srv *service) CreateMenu(ctx context.Context, req *pb.Menu, res *pb.Respon
 	res.Menu = req
 	return nil
 }
+func (srv *service) UpdateMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
+	log.Println("Updating menu: ", req)
+
+	if err := srv.repo.UpdateMenu(req); err != nil {
+		return errors.New(fmt.Sprintf("error updating menu: %v", err))
+	}
+
+	res.Menu = req
+	return nil
+}
 func (srv *service) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
+	menu, err := srv.repo.GetMenu(req.Id)
+	if err != nil {
+		return err
+	}
+	res.Menu = menu
 	return nil
 }
 func (srv *service) GetAllMenues(ctx context.Context, req *pb.Request, res *pb.ResponseMenu) error {
+	menues, err := srv.repo.GetAllMenues()
+	if err != nil {
+		return err
+	}
+	res.Menues = menues
 	return nil
 }
 
@@ -297,9 +317,29 @@ func (srv *service) CreateSchema(ctx context.Context, req *pb.FormSchema, res *p
 	res.Formschema = req
 	return nil
 }
+func (srv *service) UpdateSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
+	log.Println("Updating schema: ", req)
+
+	if err := srv.repo.UpdateSchema(req); err != nil {
+		return errors.New(fmt.Sprintf("error updating schema: %v", err))
+	}
+
+	res.Formschema = req
+	return nil
+}
 func (srv *service) GetSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
+	schema, err := srv.repo.GetSchema(req.Id)
+	if err != nil {
+		return err
+	}
+	res.Formschema = schema
 	return nil
 }
 func (srv *service) GetAllSchemas(ctx context.Context, req *pb.Request, res *pb.ResponseFormSchema) error {
+	schemas, err := srv.repo.GetAllSchemas()
+	if err != nil {
+		return err
+	}
+	res.Formschemas = schemas
 	return nil
 }

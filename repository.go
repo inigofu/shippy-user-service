@@ -23,6 +23,7 @@ type Repository interface {
 	GetAllMenues() ([]*pb.Menu, error)
 	GetMenu(id string) (*pb.Menu, error)
 	CreateMenu(menu *pb.Menu) error
+	UpdateMenu(menu *pb.Menu) error
 	GetUserMenus(userid string) ([]*pb.Menu, error)
 	GetForm(id string) (*pb.Form, error)
 	DeleteForm(form *pb.Form) error
@@ -31,6 +32,7 @@ type Repository interface {
 	GetAllForms() ([]*pb.Form, error)
 	GetSchema(id string) (*pb.FormSchema, error)
 	CreateSchema(schema *pb.FormSchema) error
+	UpdateSchema(schema *pb.FormSchema) error
 	GetAllSchemas() ([]*pb.FormSchema, error)
 	DeleteFields(form *pb.Form) error
 	DeleteTabs(form *pb.Form) error
@@ -147,6 +149,12 @@ func (repo *UserRepository) GetMenu(id string) (*pb.Menu, error) {
 }
 func (repo *UserRepository) CreateMenu(menu *pb.Menu) error {
 	if err := repo.db.Set("gorm:association_autoupdate", false).Create(menu).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) UpdateMenu(menu *pb.Menu) error {
+	if err := repo.db.Set("gorm:association_autoupdate", false).Save(menu).Error; err != nil {
 		return err
 	}
 	return nil
@@ -274,6 +282,12 @@ func (repo *UserRepository) GetSchema(id string) (*pb.FormSchema, error) {
 }
 func (repo *UserRepository) CreateSchema(formschema *pb.FormSchema) error {
 	if err := repo.db.Create(&formschema).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *UserRepository) UpdateSchema(formschema *pb.FormSchema) error {
+	if err := repo.db.Save(&formschema).Error; err != nil {
 		return err
 	}
 	return nil
