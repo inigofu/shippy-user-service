@@ -211,6 +211,7 @@ message SelectOptions {
     string onNewTag = 8;
     string onSearch = 9;
     string SchemaRefer =10;
+    string value = 11;
 }
 message Values {
     string id = 1;
