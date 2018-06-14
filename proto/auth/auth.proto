@@ -130,7 +130,7 @@ message Atributes {
 message Form {
     string id=1;
     string name=2;
-    bool multiselect=5;
+    bool multiline=5;
     // @inject_tag: `gorm:"foreignkey:FormRefer"`
     repeated FormSchema fields=3;
     // @inject_tag: gorm:"many2many:form_childrens;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:children_id;jointable_foreignkey:parent_id;"
