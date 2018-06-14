@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 
 	pb "github.com/inigofu/shippy-user-service/proto/auth"
@@ -36,6 +37,7 @@ type Repository interface {
 	GetAllSchemas() ([]*pb.FormSchema, error)
 	DeleteFields(form *pb.Form) error
 	DeleteTabs(form *pb.Form) error
+	DeleteSchema(form *pb.FormSchema) error
 }
 
 type UserRepository struct {
@@ -290,6 +292,22 @@ func (repo *UserRepository) CreateSchema(formschema *pb.FormSchema) error {
 }
 func (repo *UserRepository) UpdateSchema(formschema *pb.FormSchema) error {
 	if err := repo.db.Save(&formschema).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (repo *UserRepository) DeleteSchema(formschema *pb.FormSchema) error {
+
+	if formschema.FormRefer != "" {
+		var form *pb.Form
+		form = &pb.Form{Id: formschema.FormRefer}
+		if err := repo.db.Find(&form).Error; err == nil {
+			errtext := errors.New("this field has asocciated fomrs")
+			return errtext
+		}
+	}
+	if err := repo.db.Delete(formschema).Error; err != nil {
 		return err
 	}
 	return nil

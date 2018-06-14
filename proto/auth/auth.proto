@@ -31,6 +31,7 @@ service Auth {
     rpc CreateSchema(FormSchema) returns (ResponseFormSchema) {}
     rpc GetSchema(FormSchema) returns (ResponseFormSchema) {}
     rpc UpdateSchema(FormSchema) returns (ResponseFormSchema) {}
+    rpc DeleteSchema(FormSchema) returns (Error) {}
     rpc GetAllSchemas(Request) returns (ResponseFormSchema) {}
 }
 
@@ -130,6 +131,7 @@ message Atributes {
 message Form {
     string id=1;
     string name=2;
+     // @inject_tag: `gorm:"DEFAULT:false"`
     bool multiline=5;
     // @inject_tag: `gorm:"foreignkey:FormRefer"`
     repeated FormSchema fields=3;

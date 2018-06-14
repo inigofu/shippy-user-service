@@ -343,3 +343,12 @@ func (srv *service) GetAllSchemas(ctx context.Context, req *pb.Request, res *pb.
 	res.Formschemas = schemas
 	return nil
 }
+func (srv *service) DeleteSchema(ctx context.Context, req *pb.FormSchema, res *pb.Error) error {
+	log.Println("Deleting FormSchema")
+	err := srv.repo.DeleteSchema(req)
+	if err != nil {
+		return err
+	}
+	res = nil
+	return nil
+}

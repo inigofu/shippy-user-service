@@ -89,6 +89,7 @@ type AuthClient interface {
 	CreateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
 	GetSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
 	UpdateSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*ResponseFormSchema, error)
+	DeleteSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*Error, error)
 	GetAllSchemas(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseFormSchema, error)
 }
 
@@ -390,6 +391,16 @@ func (c *authClient) UpdateSchema(ctx context.Context, in *FormSchema, opts ...c
 	return out, nil
 }
 
+func (c *authClient) DeleteSchema(ctx context.Context, in *FormSchema, opts ...client.CallOption) (*Error, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.DeleteSchema", in)
+	out := new(Error)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authClient) GetAllSchemas(ctx context.Context, in *Request, opts ...client.CallOption) (*ResponseFormSchema, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.GetAllSchemas", in)
 	out := new(ResponseFormSchema)
@@ -431,6 +442,7 @@ type AuthHandler interface {
 	CreateSchema(context.Context, *FormSchema, *ResponseFormSchema) error
 	GetSchema(context.Context, *FormSchema, *ResponseFormSchema) error
 	UpdateSchema(context.Context, *FormSchema, *ResponseFormSchema) error
+	DeleteSchema(context.Context, *FormSchema, *Error) error
 	GetAllSchemas(context.Context, *Request, *ResponseFormSchema) error
 }
 
@@ -552,6 +564,10 @@ func (h *Auth) GetSchema(ctx context.Context, in *FormSchema, out *ResponseFormS
 
 func (h *Auth) UpdateSchema(ctx context.Context, in *FormSchema, out *ResponseFormSchema) error {
 	return h.AuthHandler.UpdateSchema(ctx, in, out)
+}
+
+func (h *Auth) DeleteSchema(ctx context.Context, in *FormSchema, out *Error) error {
+	return h.AuthHandler.DeleteSchema(ctx, in, out)
 }
 
 func (h *Auth) GetAllSchemas(ctx context.Context, in *Request, out *ResponseFormSchema) error {
