@@ -26,6 +26,7 @@ type Repository interface {
 	CreateMenu(menu *pb.Menu) error
 	UpdateMenu(menu *pb.Menu) error
 	GetUserMenus(userid string) ([]*pb.Menu, error)
+	GetUserRules(userid string) ([]*pb.Rules, error)
 	GetForm(id string) (*pb.Form, error)
 	DeleteForm(form *pb.Form) error
 	UpdateForm(form *pb.Form) (*pb.Form, error)
@@ -199,6 +200,26 @@ func (repo *UserRepository) GetUserMenus(email string) ([]*pb.Menu, error) {
 	}
 
 	return menues, nil
+}
+func (repo *UserRepository) GetUserRules(email string) ([]*pb.Rules, error) {
+	user := &pb.User{}
+	var rolrulessall []*pb.Rules
+
+	if err := repo.db.Preload("Roles.Rules").Select("id").Where("email = ?", email).
+		First(&user).Error; err != nil {
+		return nil, err
+	}
+	log.Println("Getting rules from:", user)
+	for _, rule := range user.Roles {
+		rolrulessall = append(rolrulessall, rule.Rules...)
+	}
+	if user.Designer {
+		var temprule []*pb.Rules
+		temprule[0].Actions = "update"
+		temprule[0].Subject = "griddesigner"
+		rolrulessall = append(rolrulessall, temprule...)
+	}
+	return rolrulessall, nil
 }
 func (repo *UserRepository) GetAllForms() ([]*pb.Form, error) {
 	var forms []*pb.Form

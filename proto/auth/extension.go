@@ -83,3 +83,17 @@ func (model *Values) BeforeCreate(scope *gorm.Scope) error {
 	}
 	return scope.SetColumn("Id", uuid.String())
 }
+func (model *Rules) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}
+func (model *Conditions) BeforeCreate(scope *gorm.Scope) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	return scope.SetColumn("Id", uuid.String())
+}

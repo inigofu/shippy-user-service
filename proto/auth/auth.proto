@@ -11,6 +11,7 @@ service Auth {
     rpc UpdateUser(User) returns (ResponseUser) {}
     rpc DeleteUser(User) returns (ResponseUser) {}
     rpc GetUserMenus(User) returns (ResponseMenu) {}
+    rpc GetUserRules(User) returns (ResponseRule) {}
     rpc ValidateToken(Token) returns (ResponseToken) {}
     rpc CreateRole(Role) returns (ResponseRole) {}
     rpc updateRole(Role) returns (ResponseRole) {}
@@ -44,6 +45,7 @@ message User {
     string token = 6;
     // @inject_tag: gorm:"many2many:user_roles;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:role_id;jointable_foreignkey:user_id;"
     repeated Role roles=7;
+    bool designer = 8;
 }
 
 message Request {}
@@ -62,6 +64,11 @@ message ResponseRole {
 message ResponseMenu {
     Menu menu = 1;
     repeated Menu menues = 2;
+    repeated Error errors = 3;
+}
+message ResponseRule {
+    Rules rule = 1;
+    repeated Rules rules = 2;
     repeated Error errors = 3;
 }
 message ResponseForm {
@@ -95,8 +102,21 @@ message Role {
     repeated User users=3;
     // @inject_tag: gorm:"many2many:role_menus;foreignkey:id;association_foreignkey:id;association_jointable_foreignkey:menu_id;jointable_foreignkey:role_id;"
     repeated Menu menues=4;
+    // @inject_tag: `gorm:"foreignkey:rolesrefer"`
+    repeated Rules rules = 5;
 }
-
+message Rules {
+    string id = 1;
+    string actions = 2;
+    string subject = 3; 
+    repeated string fields = 4;
+    Conditions conditions = 5;
+    string rolesrefer = 6;
+}
+message Conditions {
+    string id = 1;
+    repeated string conditions = 2;
+}
 message Menu {
     string id = 1;
     string name = 2;
@@ -192,6 +212,7 @@ int32 order = 33;
 SelectOptions selectoptions = 34;
 // @inject_tag: `gorm:"foreignkey:SchemaRefer"`
 repeated Values values = 45;
+repeated Rules rules = 46;
 }
 message Buttons {
     string id =1;

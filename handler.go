@@ -27,6 +27,34 @@ func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser)
 	return nil
 }
 
+func (srv *service) GetUserRules(ctx context.Context, req *pb.User, res *pb.ResponseRule) error {
+	meta, ok := metadata.FromContext(ctx)
+	if !ok {
+		return errors.New("no auth meta-data found in request")
+	}
+
+	// Note this is now uppercase (not entirely sure why this is...)
+	token := meta["Authorization"]
+	if token == "" {
+		return errors.New("no auth meta-data found in request")
+	}
+	log.Println("Authenticating with token: ", token)
+	tokin := &pb.Token{
+		Token: token,
+	}
+	tokout := &pb.ResponseToken{}
+	err := srv.ValidateToken(ctx, tokin, tokout)
+	if err != nil {
+		return err
+	}
+	rules, err := srv.repo.GetUserRules(req.Email)
+	if err != nil {
+		return err
+	}
+	res.Rules = rules
+	return nil
+}
+
 func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {

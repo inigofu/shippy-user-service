@@ -13,12 +13,15 @@ It has these top-level messages:
 	ResponseUser
 	ResponseRole
 	ResponseMenu
+	ResponseRule
 	ResponseForm
 	ResponseFormSchema
 	ResponseToken
 	Token
 	Error
 	Role
+	Rules
+	Conditions
 	Menu
 	Badge
 	Wrapper
@@ -69,6 +72,7 @@ type AuthClient interface {
 	UpdateUser(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	DeleteUser(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseUser, error)
 	GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error)
+	GetUserRules(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseRule, error)
 	ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*ResponseToken, error)
 	CreateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
 	UpdateRole(ctx context.Context, in *Role, opts ...client.CallOption) (*ResponseRole, error)
@@ -184,6 +188,16 @@ func (c *authClient) DeleteUser(ctx context.Context, in *User, opts ...client.Ca
 func (c *authClient) GetUserMenus(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseMenu, error) {
 	req := c.c.NewRequest(c.serviceName, "Auth.GetUserMenus", in)
 	out := new(ResponseMenu)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) GetUserRules(ctx context.Context, in *User, opts ...client.CallOption) (*ResponseRule, error) {
+	req := c.c.NewRequest(c.serviceName, "Auth.GetUserRules", in)
+	out := new(ResponseRule)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -422,6 +436,7 @@ type AuthHandler interface {
 	UpdateUser(context.Context, *User, *ResponseUser) error
 	DeleteUser(context.Context, *User, *ResponseUser) error
 	GetUserMenus(context.Context, *User, *ResponseMenu) error
+	GetUserRules(context.Context, *User, *ResponseRule) error
 	ValidateToken(context.Context, *Token, *ResponseToken) error
 	CreateRole(context.Context, *Role, *ResponseRole) error
 	UpdateRole(context.Context, *Role, *ResponseRole) error
@@ -484,6 +499,10 @@ func (h *Auth) DeleteUser(ctx context.Context, in *User, out *ResponseUser) erro
 
 func (h *Auth) GetUserMenus(ctx context.Context, in *User, out *ResponseMenu) error {
 	return h.AuthHandler.GetUserMenus(ctx, in, out)
+}
+
+func (h *Auth) GetUserRules(ctx context.Context, in *User, out *ResponseRule) error {
+	return h.AuthHandler.GetUserRules(ctx, in, out)
 }
 
 func (h *Auth) ValidateToken(ctx context.Context, in *Token, out *ResponseToken) error {
