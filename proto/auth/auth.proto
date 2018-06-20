@@ -12,6 +12,7 @@ service Auth {
     rpc DeleteUser(User) returns (ResponseUser) {}
     rpc GetUserMenus(User) returns (ResponseMenu) {}
     rpc GetUserRules(User) returns (ResponseRule) {}
+    rpc Login(User) returns (ResponseUser) {}
     rpc ValidateToken(Token) returns (ResponseToken) {}
     rpc CreateRole(Role) returns (ResponseRole) {}
     rpc updateRole(Role) returns (ResponseRole) {}
@@ -55,6 +56,8 @@ message ResponseUser {
     repeated User users = 2;
     repeated Error errors = 3;
     Token token = 4;
+    repeated Menu menues = 5;
+    repeated Rules rules = 6;
 }
 message ResponseRole {
     Role role = 1;
