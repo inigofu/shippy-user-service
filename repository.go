@@ -215,8 +215,7 @@ func (repo *UserRepository) GetUserRules(email string) ([]*pb.Rules, error) {
 	}
 	if user.Designer {
 		var temprule []*pb.Rules
-		temprule[0] = {Actions:"update",
-		Subject:"griddesigner"}
+		temprule[0] = &pb.Rules{Actions: "update", Subject: "griddesigner"}
 		rolrulessall = append(rolrulessall, temprule...)
 	}
 	return rolrulessall, nil
