@@ -239,6 +239,10 @@ func (srv *service) Login(ctx context.Context, req *pb.User, res *pb.ResponseUse
 	if err != nil {
 		return err
 	}
+	ctx = metadata.NewContext(
+		ctx,
+		metadata.Pairs("Authorization", token.Token),
+	)
 	menu := &pb.ResponseMenu{}
 	err = srv.GetUserMenus(ctx, req, menu)
 	if err != nil {
