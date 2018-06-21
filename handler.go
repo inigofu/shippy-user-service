@@ -75,13 +75,16 @@ func (srv *service) GetUserRules(ctx context.Context, req *pb.User, res *pb.Resp
 }
 
 func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
+	log.Println("GetUserMenus context", ctx)
 	meta, ok := metadata.FromIncomingContext(ctx)
+	log.Println("GetUserMenus meta", meta)
 	if !ok {
 		return errors.New("no auth meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
 	token := meta.Get("Authorization")[0]
+	log.Println("GetUserMenus token", token)
 	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
