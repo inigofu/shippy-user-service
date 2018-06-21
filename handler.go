@@ -21,7 +21,7 @@ type service struct {
 func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -49,7 +49,7 @@ func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser)
 func (srv *service) GetUserRules(ctx context.Context, req *pb.User, res *pb.ResponseRule) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -77,7 +77,7 @@ func (srv *service) GetUserRules(ctx context.Context, req *pb.User, res *pb.Resp
 func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -105,7 +105,7 @@ func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.Resp
 func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -132,7 +132,7 @@ func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.Respons
 func (srv *service) GetAllUsersRole(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -159,7 +159,7 @@ func (srv *service) GetAllUsersRole(ctx context.Context, req *pb.Request, res *p
 func (srv *service) UpdateUser(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -186,7 +186,7 @@ func (srv *service) UpdateUser(ctx context.Context, req *pb.User, res *pb.Respon
 func (srv *service) DeleteUser(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -315,7 +315,7 @@ func (srv *service) CreateRole(ctx context.Context, req *pb.Role, res *pb.Respon
 	log.Println("Creating role: ", req)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -343,7 +343,7 @@ func (srv *service) UpdateRole(ctx context.Context, req *pb.Role, res *pb.Respon
 	log.Println("Creating role: ", req)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -370,7 +370,7 @@ func (srv *service) UpdateRole(ctx context.Context, req *pb.Role, res *pb.Respon
 func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -397,7 +397,7 @@ func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseR
 func (srv *service) DeleteRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -424,7 +424,7 @@ func (srv *service) DeleteRole(ctx context.Context, req *pb.Role, res *pb.Respon
 func (srv *service) GetAllRoles(ctx context.Context, req *pb.Request, res *pb.ResponseRole) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -453,7 +453,7 @@ func (srv *service) CreateMenu(ctx context.Context, req *pb.Menu, res *pb.Respon
 	log.Println("Creating menu: ", req)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -481,7 +481,7 @@ func (srv *service) UpdateMenu(ctx context.Context, req *pb.Menu, res *pb.Respon
 	log.Println("Updating menu: ", req)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -508,7 +508,7 @@ func (srv *service) UpdateMenu(ctx context.Context, req *pb.Menu, res *pb.Respon
 func (srv *service) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -535,7 +535,7 @@ func (srv *service) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseM
 func (srv *service) GetAllMenues(ctx context.Context, req *pb.Request, res *pb.ResponseMenu) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -564,7 +564,7 @@ func (srv *service) CreateForm(ctx context.Context, req *pb.Form, res *pb.Respon
 	log.Println("Creating form: ", req)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -592,7 +592,7 @@ func (srv *service) GetForm(ctx context.Context, req *pb.Form, res *pb.ResponseF
 	log.Println("Getting form: ", req, "with id:", req.Id)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -620,7 +620,7 @@ func (srv *service) DeleteForm(ctx context.Context, req *pb.Form, res *pb.Respon
 	log.Println("Getting form: ", req, "with id:", req.Id)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -648,7 +648,7 @@ func (srv *service) UpdateForm(ctx context.Context, req *pb.Form, res *pb.Respon
 	log.Println("Updating form: ", req, "with id:", req.Id)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -675,7 +675,7 @@ func (srv *service) UpdateForm(ctx context.Context, req *pb.Form, res *pb.Respon
 func (srv *service) GetAllForms(ctx context.Context, req *pb.Request, res *pb.ResponseForm) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -703,7 +703,7 @@ func (srv *service) DeleteFields(ctx context.Context, req *pb.Form, res *pb.Erro
 	log.Println("Deleting fields")
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -731,7 +731,7 @@ func (srv *service) DeleteTabs(ctx context.Context, req *pb.Form, res *pb.Error)
 	log.Println("Deleting tabs")
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -760,7 +760,7 @@ func (srv *service) CreateSchema(ctx context.Context, req *pb.FormSchema, res *p
 	log.Println("Creating schema: ", req)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -788,7 +788,7 @@ func (srv *service) UpdateSchema(ctx context.Context, req *pb.FormSchema, res *p
 	log.Println("Updating schema: ", req)
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -815,7 +815,7 @@ func (srv *service) UpdateSchema(ctx context.Context, req *pb.FormSchema, res *p
 func (srv *service) GetSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -842,7 +842,7 @@ func (srv *service) GetSchema(ctx context.Context, req *pb.FormSchema, res *pb.R
 func (srv *service) GetAllSchemas(ctx context.Context, req *pb.Request, res *pb.ResponseFormSchema) error {
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
@@ -870,7 +870,7 @@ func (srv *service) DeleteSchema(ctx context.Context, req *pb.FormSchema, res *p
 	log.Println("Deleting FormSchema")
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
-		return errors.New("no auth meta-data found in request")
+		return errors.New("no meta-data found in request")
 	}
 
 	// Note this is now uppercase (not entirely sure why this is...)
