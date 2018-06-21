@@ -239,7 +239,7 @@ func (srv *service) Login(ctx context.Context, req *pb.User, res *pb.ResponseUse
 	if err != nil {
 		return err
 	}
-	var md metadata.Metadata
+	md := make(metadata.Metadata)
 	md["Authorization"] = token.Token.Token
 	ctx = metadata.NewContext(ctx, md)
 	menu := &pb.ResponseMenu{}
