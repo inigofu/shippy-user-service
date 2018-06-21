@@ -176,7 +176,6 @@ func (srv *service) DeleteUser(ctx context.Context, req *pb.User, res *pb.Respon
 func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.ResponseToken) error {
 	log.Println("Auth in with:", req.Email, req.Password)
 	user, err := srv.repo.GetByEmail(req.Email)
-	log.Println(user, err)
 	if err != nil {
 		return err
 	}
@@ -204,8 +203,9 @@ func (srv *service) Login(ctx context.Context, req *pb.User, res *pb.ResponseUse
 	// add token to context for gettin menues and rules
 	type favContextKey string
 	k := favContextKey("Authorization")
+	log.Println("ctx before", ctx)
 	ctx = context.WithValue(ctx, k, token.Token)
-
+	log.Println("ctx after", ctx)
 	menu := &pb.ResponseMenu{}
 	err = srv.GetUserMenus(ctx, req, menu)
 	if err != nil {
