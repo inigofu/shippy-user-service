@@ -205,7 +205,7 @@ func (repo *UserRepository) GetUserRules(email string) ([]*pb.Rules, error) {
 	user := &pb.User{}
 	var rolrulessall []*pb.Rules
 
-	if err := repo.db.Preload("Roles.Rules").Select("id").Where("email = ?", email).
+	if err := repo.db.Preload("Roles.Rules").Where("email = ?", email).
 		First(&user).Error; err != nil {
 		return nil, err
 	}
