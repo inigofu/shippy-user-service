@@ -39,7 +39,11 @@ func (srv *TokenService) Decode(tokenString string) (*CustomClaims, error) {
 	fmt.Println(tokenString)
 	// Parse the token
 	splitToken := strings.Split(tokenString, "Bearer ")
-	tokenString = splitToken[1]
+	if len(splitToken) >= 2 {
+		tokenString = splitToken[1]
+	} else {
+		tokenString = splitToken[0]
+	}
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return key, nil
 	})
