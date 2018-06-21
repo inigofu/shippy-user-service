@@ -68,7 +68,7 @@ func (srv *service) GetUserRules(ctx context.Context, req *pb.User, res *pb.Resp
 
 func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
 	log.Println("GetUserMenus with context", ctx)
-	token, ok := ctx.Value("Authorization")
+	token, ok := ctx.Value("Authorization").(string)
 	if !ok {
 		return errors.New("no auth meta-data found in request")
 	}
