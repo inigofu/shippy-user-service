@@ -6,29 +6,27 @@ import (
 	"log"
 
 	pb "github.com/inigofu/shippy-user-service/proto/auth"
-	"github.com/micro/go-micro/metadata"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/net/context"
 )
 
 const topic = "user.created"
 
+type favContextKey string
+
 type service struct {
 	repo         Repository
 	tokenService Authable
 }
 
-func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
-	meta, ok := metadata.FromContext(ctx)
-	if !ok {
-		return errors.New("no meta-data found in request")
-	}
+const contextKeyAuthtoken = favContextKey("Authorization")
 
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
+func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
+	if !ok {
 		return errors.New("no auth meta-data found in request")
 	}
+
 	log.Println("Authenticating with token: ", token)
 	tokin := &pb.Token{
 		Token: token,
@@ -47,14 +45,8 @@ func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser)
 }
 
 func (srv *service) GetUserRules(ctx context.Context, req *pb.User, res *pb.ResponseRule) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -75,14 +67,8 @@ func (srv *service) GetUserRules(ctx context.Context, req *pb.User, res *pb.Resp
 }
 
 func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.ResponseMenu) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -103,14 +89,8 @@ func (srv *service) GetUserMenus(ctx context.Context, req *pb.User, res *pb.Resp
 }
 
 func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -130,14 +110,8 @@ func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.Respons
 	return nil
 }
 func (srv *service) GetAllUsersRole(ctx context.Context, req *pb.Request, res *pb.ResponseUser) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -157,14 +131,8 @@ func (srv *service) GetAllUsersRole(ctx context.Context, req *pb.Request, res *p
 	return nil
 }
 func (srv *service) UpdateUser(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -184,14 +152,8 @@ func (srv *service) UpdateUser(ctx context.Context, req *pb.User, res *pb.Respon
 	return nil
 }
 func (srv *service) DeleteUser(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -294,7 +256,6 @@ func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.ResponseUs
 
 func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.ResponseToken) error {
 	log.Println("validating token:", req.Token)
-	log.Println("validating token complete:", req)
 	// Decode token
 	claims, err := srv.tokenService.Decode(req.Token)
 
@@ -313,14 +274,8 @@ func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Re
 }
 func (srv *service) CreateRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
 	log.Println("Creating role: ", req)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -341,14 +296,8 @@ func (srv *service) CreateRole(ctx context.Context, req *pb.Role, res *pb.Respon
 }
 func (srv *service) UpdateRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
 	log.Println("Creating role: ", req)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -368,14 +317,8 @@ func (srv *service) UpdateRole(ctx context.Context, req *pb.Role, res *pb.Respon
 	return nil
 }
 func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -395,14 +338,8 @@ func (srv *service) GetRole(ctx context.Context, req *pb.Role, res *pb.ResponseR
 	return nil
 }
 func (srv *service) DeleteRole(ctx context.Context, req *pb.Role, res *pb.ResponseRole) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -422,14 +359,8 @@ func (srv *service) DeleteRole(ctx context.Context, req *pb.Role, res *pb.Respon
 	return nil
 }
 func (srv *service) GetAllRoles(ctx context.Context, req *pb.Request, res *pb.ResponseRole) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -451,14 +382,8 @@ func (srv *service) GetAllRoles(ctx context.Context, req *pb.Request, res *pb.Re
 
 func (srv *service) CreateMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
 	log.Println("Creating menu: ", req)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -479,14 +404,8 @@ func (srv *service) CreateMenu(ctx context.Context, req *pb.Menu, res *pb.Respon
 }
 func (srv *service) UpdateMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
 	log.Println("Updating menu: ", req)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -506,14 +425,8 @@ func (srv *service) UpdateMenu(ctx context.Context, req *pb.Menu, res *pb.Respon
 	return nil
 }
 func (srv *service) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseMenu) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -533,14 +446,8 @@ func (srv *service) GetMenu(ctx context.Context, req *pb.Menu, res *pb.ResponseM
 	return nil
 }
 func (srv *service) GetAllMenues(ctx context.Context, req *pb.Request, res *pb.ResponseMenu) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -562,14 +469,8 @@ func (srv *service) GetAllMenues(ctx context.Context, req *pb.Request, res *pb.R
 
 func (srv *service) CreateForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
 	log.Println("Creating form: ", req)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -590,14 +491,8 @@ func (srv *service) CreateForm(ctx context.Context, req *pb.Form, res *pb.Respon
 }
 func (srv *service) GetForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
 	log.Println("Getting form: ", req, "with id:", req.Id)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -618,14 +513,8 @@ func (srv *service) GetForm(ctx context.Context, req *pb.Form, res *pb.ResponseF
 }
 func (srv *service) DeleteForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
 	log.Println("Getting form: ", req, "with id:", req.Id)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -646,14 +535,8 @@ func (srv *service) DeleteForm(ctx context.Context, req *pb.Form, res *pb.Respon
 }
 func (srv *service) UpdateForm(ctx context.Context, req *pb.Form, res *pb.ResponseForm) error {
 	log.Println("Updating form: ", req, "with id:", req.Id)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -673,14 +556,8 @@ func (srv *service) UpdateForm(ctx context.Context, req *pb.Form, res *pb.Respon
 	return nil
 }
 func (srv *service) GetAllForms(ctx context.Context, req *pb.Request, res *pb.ResponseForm) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -701,14 +578,8 @@ func (srv *service) GetAllForms(ctx context.Context, req *pb.Request, res *pb.Re
 }
 func (srv *service) DeleteFields(ctx context.Context, req *pb.Form, res *pb.Error) error {
 	log.Println("Deleting fields")
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -729,14 +600,8 @@ func (srv *service) DeleteFields(ctx context.Context, req *pb.Form, res *pb.Erro
 }
 func (srv *service) DeleteTabs(ctx context.Context, req *pb.Form, res *pb.Error) error {
 	log.Println("Deleting tabs")
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -758,14 +623,8 @@ func (srv *service) DeleteTabs(ctx context.Context, req *pb.Form, res *pb.Error)
 
 func (srv *service) CreateSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
 	log.Println("Creating schema: ", req)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -786,14 +645,8 @@ func (srv *service) CreateSchema(ctx context.Context, req *pb.FormSchema, res *p
 }
 func (srv *service) UpdateSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
 	log.Println("Updating schema: ", req)
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -813,14 +666,8 @@ func (srv *service) UpdateSchema(ctx context.Context, req *pb.FormSchema, res *p
 	return nil
 }
 func (srv *service) GetSchema(ctx context.Context, req *pb.FormSchema, res *pb.ResponseFormSchema) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -840,14 +687,8 @@ func (srv *service) GetSchema(ctx context.Context, req *pb.FormSchema, res *pb.R
 	return nil
 }
 func (srv *service) GetAllSchemas(ctx context.Context, req *pb.Request, res *pb.ResponseFormSchema) error {
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
@@ -868,14 +709,8 @@ func (srv *service) GetAllSchemas(ctx context.Context, req *pb.Request, res *pb.
 }
 func (srv *service) DeleteSchema(ctx context.Context, req *pb.FormSchema, res *pb.Error) error {
 	log.Println("Deleting FormSchema")
-	meta, ok := metadata.FromContext(ctx)
+	token, ok := ctx.Value(contextKeyAuthtoken).(string)
 	if !ok {
-		return errors.New("no meta-data found in request")
-	}
-
-	// Note this is now uppercase (not entirely sure why this is...)
-	token := meta["Authorization"]
-	if token == "" {
 		return errors.New("no auth meta-data found in request")
 	}
 	log.Println("Authenticating with token: ", token)
