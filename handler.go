@@ -292,7 +292,6 @@ func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.ResponseUs
 
 func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.ResponseToken) error {
 	log.Println("validating token:", req.Token)
-	log.Println("validating token complete:", req)
 	// Decode token
 	claims, err := srv.tokenService.Decode(req.Token)
 
@@ -306,6 +305,38 @@ func (srv *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Re
 
 	res.Token = &pb.Token{Valid: true}
 	res.User = &pb.User{Email: claims.User.Email}
+
+	return nil
+}
+func (srv *service) UserToken(ctx context.Context, req *pb.Token, res *pb.ResponseUser) error {
+	log.Println("validating token:", req.Token)
+	// Decode token
+	claims, err := srv.tokenService.Decode(req.Token)
+
+	if err != nil {
+		return err
+	}
+
+	if claims.User.Id == "" {
+		return errors.New("invalid user")
+	}
+	md := make(metadata.Metadata)
+	md["Authorization"] = req.Token
+	ctx = metadata.NewContext(ctx, md)
+	menu := &pb.ResponseMenu{}
+	err = srv.GetUserMenus(ctx, claims.User, menu)
+	if err != nil {
+		return err
+	}
+	rule := &pb.ResponseRule{}
+	err = srv.GetUserRules(ctx, claims.User, rule)
+	if err != nil {
+		return err
+	}
+	res.Menues = menu.Menues
+	res.User = claims.User
+	res.Token = &pb.Token{Valid: true, Token: req.Token}
+	res.Rules = rule.Rules
 
 	return nil
 }
