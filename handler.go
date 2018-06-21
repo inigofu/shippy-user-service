@@ -243,8 +243,7 @@ func (srv *service) Login(ctx context.Context, req *pb.User, res *pb.ResponseUse
 		return err
 	}
 
-	md := metadata.New(map[string]string{"Authorization": token.Token.Token})
-	ctx = metadata.NewOutgoingContext(context.Background(), md)
+	ctx = metadata.AppendToOutgoingContext(ctx, "Authorization", token.Token.Token)
 	menu := &pb.ResponseMenu{}
 	err = srv.GetUserMenus(ctx, req, menu)
 	if err != nil {
