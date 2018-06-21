@@ -12,14 +12,12 @@ import (
 
 const topic = "user.created"
 
-type favContextKey string
-
 type service struct {
 	repo         Repository
 	tokenService Authable
 }
 
-const contextKeyAuthtoken = favContextKey("Authorization")
+const contextKeyAuthtoken = string("Authorization")
 
 func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.ResponseUser) error {
 	token, ok := ctx.Value(contextKeyAuthtoken).(string)
@@ -205,9 +203,8 @@ func (srv *service) Login(ctx context.Context, req *pb.User, res *pb.ResponseUse
 	}
 	// add token to context for gettin menues and rules
 	type favContextKey string
-	k := favContextKey("Authorization")
 	log.Println("ctx before", ctx)
-	ctx = context.WithValue(ctx, k, token.Token.Token)
+	ctx = context.WithValue(ctx, contextKeyAuthtoken, token.Token.Token)
 	log.Println("ctx after", ctx)
 	menu := &pb.ResponseMenu{}
 	err = srv.GetUserMenus(ctx, req, menu)
