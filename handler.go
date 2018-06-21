@@ -204,7 +204,7 @@ func (srv *service) Login(ctx context.Context, req *pb.User, res *pb.ResponseUse
 	type favContextKey string
 	k := favContextKey("Authorization")
 	log.Println("ctx before", ctx)
-	ctx = context.WithValue(ctx, k, token.Token)
+	ctx = context.WithValue(ctx, k, token.Token.Token)
 	log.Println("ctx after", ctx)
 	menu := &pb.ResponseMenu{}
 	err = srv.GetUserMenus(ctx, req, menu)
